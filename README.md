@@ -44,13 +44,22 @@ python scripts/eval_retrieval.py --retrievers bm25,dense,hybrid --embedder mistr
 | retriever | recall@1 | recall@3 | recall@5 | MRR | recall@5 lexical | recall@5 paraphrase |
 |---|---|---|---|---|---|---|
 | BM25 | 0.615 | 0.731 | 0.769 | 0.696 | 1.000 | 0.657 |
-| Dense (mistral-embed) | – | – | – | – | – | – |
-| Hybrid (RRF) | – | – | – | – | – | – |
+| Dense (mistral-embed) | 0.885 | 1.000 | 1.000 | 0.942 | 1.000 | 1.000 |
+| Hybrid (RRF, BM25 + dense) | 0.712 | 0.885 | 0.942 | 0.801 | 1.000 | 0.914 |
+
+Median query latency: BM25 0.1 ms, dense 173 ms, hybrid 190 ms (dominated by the embedding API
+call for the query).
 
 **Observation:** BM25 retrieves every lexical question but misses about a third of the paraphrased
 ones (e.g. "Can I turn my voucher balance into cash?" vs. a document that talks about *gift cards*).
-This is the gap dense and hybrid retrieval should close.
+Dense retrieval closes that gap completely. Hybrid retrieval is *worse* than dense alone: RRF weights
+both rankings equally, so BM25's wrong documents on paraphrased questions push correct ones down.
+On this corpus, unweighted hybrid is not worth its extra complexity; a weighted fusion or a reranker
+is evaluated later.
 
-**Limitation:** the questions were written by the same person as the documents, which can make
-lexical questions easier than real customer messages. The labelled set will be extended with
-messages from a public customer-support dataset.
+**Limitations:**
+- The corpus is small: 24 documents give only 25 chunks, so recall@5 means finding the right
+  document among the top ~20% of the corpus. recall@1 and MRR are the more informative columns.
+- The questions were written by the same person as the documents, which can make lexical
+  questions easier than real customer messages. The labelled set will be extended with messages
+  from a public customer-support dataset.
