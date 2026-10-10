@@ -1,0 +1,52 @@
+{"id": "q01", "question": "How many days do I have to send something back?", "gold": ["returns-general"], "style": "paraphrase"}
+{"id": "q02", "question": "Is the return free if I live in Austria?", "gold": ["returns-general"], "style": "lexical"}
+{"id": "q03", "question": "I live in France, do I have to pay for sending items back?", "gold": ["returns-general"], "style": "paraphrase"}
+{"id": "q04", "question": "Can I send back earrings I bought last week?", "gold": ["returns-exceptions"], "style": "paraphrase"}
+{"id": "q05", "question": "I opened a lipstick but don't like the colour, can I return it?", "gold": ["returns-exceptions"], "style": "paraphrase"}
+{"id": "q06", "question": "Are final sale items returnable?", "gold": ["returns-exceptions"], "style": "lexical"}
+{"id": "q07", "question": "My new jacket arrived with a torn sleeve, what should I do?", "gold": ["returns-damaged"], "style": "paraphrase"}
+{"id": "q08", "question": "The blender I received doesn't turn on.", "gold": ["returns-damaged", "warranty-electronics"], "style": "paraphrase"}
+{"id": "q09", "question": "Do you refund shipping costs when the product is defective?", "gold": ["returns-damaged"], "style": "lexical"}
+{"id": "q10", "question": "When will my money be back after a return?", "gold": ["refunds-timing"], "style": "paraphrase"}
+{"id": "q11", "question": "How long does a PayPal refund take?", "gold": ["refunds-timing"], "style": "lexical"}
+{"id": "q12", "question": "I paid with a gift card, how do I get my refund?", "gold": ["refunds-timing"], "style": "lexical"}
+{"id": "q13", "question": "Why did I get less money back than I paid?", "gold": ["refunds-partial"], "style": "paraphrase"}
+{"id": "q14", "question": "What happens to my discount if I return part of my order?", "gold": ["refunds-partial"], "style": "paraphrase"}
+{"id": "q15", "question": "Can I swap my shoes for a bigger size?", "gold": ["exchanges"], "style": "paraphrase"}
+{"id": "q16", "question": "Do you offer exchanges for a different colour?", "gold": ["exchanges"], "style": "lexical"}
+{"id": "q17", "question": "How much does delivery cost in Germany?", "gold": ["shipping-germany"], "style": "paraphrase"}
+{"id": "q18", "question": "From what order value is shipping free?", "gold": ["shipping-germany", "shipping-eu"], "style": "lexical"}
+{"id": "q19", "question": "If I order at noon, can I get it tomorrow?", "gold": ["shipping-germany"], "style": "paraphrase"}
+{"id": "q20", "question": "Which carrier delivers my parcel?", "gold": ["shipping-germany"], "style": "paraphrase"}
+{"id": "q21", "question": "Do you deliver to Switzerland?", "gold": ["shipping-eu"], "style": "lexical"}
+{"id": "q22", "question": "Will I pay customs fees in Norway?", "gold": ["shipping-eu"], "style": "paraphrase"}
+{"id": "q23", "question": "Is next-day delivery possible to Italy?", "gold": ["shipping-eu"], "style": "paraphrase"}
+{"id": "q24", "question": "My package still hasn't arrived and it's been a week.", "gold": ["shipping-delays"], "style": "paraphrase"}
+{"id": "q25", "question": "The tracking hasn't moved for days, what now?", "gold": ["shipping-delays"], "style": "lexical"}
+{"id": "q26", "question": "What if my parcel got lost?", "gold": ["shipping-delays"], "style": "lexical"}
+{"id": "q27", "question": "Where can I see where my order is?", "gold": ["tracking"], "style": "paraphrase"}
+{"id": "q28", "question": "What does an order number look like?", "gold": ["tracking"], "style": "lexical"}
+{"id": "q29", "question": "I ordered by mistake 20 minutes ago, can I cancel?", "gold": ["order-changes"], "style": "paraphrase"}
+{"id": "q30", "question": "Can I change the delivery address after the item was shipped?", "gold": ["order-changes"], "style": "lexical"}
+{"id": "q31", "question": "Can I pay later?", "gold": ["payment-methods"], "style": "paraphrase"}
+{"id": "q32", "question": "Do you accept cash on delivery?", "gold": ["payment-methods"], "style": "lexical"}
+{"id": "q33", "question": "When is my credit card actually charged?", "gold": ["payment-methods"], "style": "paraphrase"}
+{"id": "q34", "question": "My card was declined at checkout.", "gold": ["payment-failed"], "style": "paraphrase"}
+{"id": "q35", "question": "Why did my bank reject the payment?", "gold": ["payment-failed"], "style": "paraphrase"}
+{"id": "q36", "question": "Where do I find the bill for my purchase?", "gold": ["invoices"], "style": "paraphrase"}
+{"id": "q37", "question": "Can I get an invoice with my company's VAT number?", "gold": ["invoices"], "style": "lexical"}
+{"id": "q38", "question": "How long is a gift card valid?", "gold": ["gift-cards"], "style": "lexical"}
+{"id": "q39", "question": "Can I turn my voucher balance into cash?", "gold": ["gift-cards"], "style": "paraphrase"}
+{"id": "q40", "question": "Can I use two promo codes on one order?", "gold": ["discount-codes"], "style": "paraphrase"}
+{"id": "q41", "question": "I forgot to enter my code at checkout, can you apply it now?", "gold": ["discount-codes"], "style": "paraphrase"}
+{"id": "q42", "question": "The item got cheaper two days after I bought it.", "gold": ["price-match"], "style": "paraphrase"}
+{"id": "q43", "question": "Do you match Amazon's price?", "gold": ["price-match"], "style": "paraphrase"}
+{"id": "q44", "question": "My laptop broke after 8 months.", "gold": ["warranty-electronics"], "style": "paraphrase"}
+{"id": "q45", "question": "How long does a repair take?", "gold": ["warranty-electronics"], "style": "lexical"}
+{"id": "q46", "question": "I can't log in, I forgot my password.", "gold": ["account-security"], "style": "lexical"}
+{"id": "q47", "question": "How do I remove my account completely?", "gold": ["account-security", "data-privacy"], "style": "paraphrase"}
+{"id": "q48", "question": "Do you keep my chat messages?", "gold": ["data-privacy"], "style": "paraphrase"}
+{"id": "q49", "question": "What do I get with the yearly subscription?", "gold": ["membership"], "style": "paraphrase"}
+{"id": "q50", "question": "I want to talk to a real person.", "gold": ["human-support"], "style": "paraphrase"}
+{"id": "q51", "question": "Does this sneaker run small?", "gold": ["sizing"], "style": "paraphrase"}
+{"id": "q52", "question": "What do you do with returned clothes?", "gold": ["sustainability"], "style": "paraphrase"}

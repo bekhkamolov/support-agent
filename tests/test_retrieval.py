@@ -1,0 +1,38 @@
+import numpy as np
+
+from support_agent.ingest import Chunk
+from support_agent.retrieval import BM25Retriever, DenseRetriever, HybridRetriever
+
+CHUNKS = [
+    Chunk(chunk_id="ship#0", doc_id="ship", title="Shipping", text="Shipping costs EUR 4.95 in Germany"),
+    Chunk(chunk_id="ret#0", doc_id="ret", title="Returns", text="Return items within 30 days"),
+    Chunk(chunk_id="pay#0", doc_id="pay", title="Payment", text="We accept PayPal and Klarna"),
+]
+
+
+class FakeEmbedder:
+    """Deterministic bag-of-words embedder for tests (no network)."""
+
+    name = "fake"
+    vocab = ["shipping", "return", "paypal", "germany", "days", "klarna"]
+
+    def embed(self, texts):
+        return np.array([[t.lower().count(w) + 0.01 for w in self.vocab] for t in texts], dtype=np.float32)
+
+
+def test_bm25_finds_keyword_match():
+    assert BM25Retriever(CHUNKS).search("paypal", k=1)[0].chunk.doc_id == "pay"
+
+
+def test_dense_with_fake_embedder(tmp_path, monkeypatch):
+    monkeypatch.setattr("support_agent.retrieval.dense.CACHE_DIR", tmp_path)
+    r = DenseRetriever(CHUNKS, FakeEmbedder())
+    assert r.search("return within days", k=1)[0].chunk.doc_id == "ret"
+
+
+def test_hybrid_fuses_rankings(tmp_path, monkeypatch):
+    monkeypatch.setattr("support_agent.retrieval.dense.CACHE_DIR", tmp_path)
+    hybrid = HybridRetriever([BM25Retriever(CHUNKS), DenseRetriever(CHUNKS, FakeEmbedder())])
+    results = hybrid.search("shipping germany", k=3)
+    assert results[0].chunk.doc_id == "ship"
+    assert len({r.chunk.chunk_id for r in results}) == len(results)
