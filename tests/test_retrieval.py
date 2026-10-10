@@ -43,7 +43,7 @@ class _RateLimited(Exception):
 
 
 def test_backoff_retries_on_429_then_succeeds():
-    from support_agent.retrieval.dense import _with_backoff
+    from support_agent.retry import with_backoff
 
     calls, sleeps = [], []
 
@@ -53,17 +53,35 @@ def test_backoff_retries_on_429_then_succeeds():
             raise _RateLimited()
         return "ok"
 
-    assert _with_backoff(flaky, sleep=sleeps.append) == "ok"
+    assert with_backoff(flaky, sleep=sleeps.append) == "ok"
     assert sleeps == [1.0, 2.0]
+
+
+def test_backoff_fails_fast_when_plan_allows_zero_requests():
+    import pytest
+
+    from support_agent.retry import ModelNotAvailableError, with_backoff
+
+    class Blocked(Exception):
+        status_code = 429
+        headers = {"x-ratelimit-limit-req-minute": "0"}
+
+    def blocked():
+        raise Blocked()
+
+    sleeps = []
+    with pytest.raises(ModelNotAvailableError):
+        with_backoff(blocked, sleep=sleeps.append)
+    assert sleeps == []
 
 
 def test_backoff_does_not_retry_other_errors():
     import pytest
 
-    from support_agent.retrieval.dense import _with_backoff
+    from support_agent.retry import with_backoff
 
     def broken():
         raise ValueError("bad request")
 
     with pytest.raises(ValueError):
-        _with_backoff(broken, sleep=lambda s: None)
+        with_backoff(broken, sleep=lambda s: None)
