@@ -36,3 +36,34 @@ def test_hybrid_fuses_rankings(tmp_path, monkeypatch):
     results = hybrid.search("shipping germany", k=3)
     assert results[0].chunk.doc_id == "ship"
     assert len({r.chunk.chunk_id for r in results}) == len(results)
+
+
+class _RateLimited(Exception):
+    status_code = 429
+
+
+def test_backoff_retries_on_429_then_succeeds():
+    from support_agent.retrieval.dense import _with_backoff
+
+    calls, sleeps = [], []
+
+    def flaky():
+        calls.append(1)
+        if len(calls) < 3:
+            raise _RateLimited()
+        return "ok"
+
+    assert _with_backoff(flaky, sleep=sleeps.append) == "ok"
+    assert sleeps == [1.0, 2.0]
+
+
+def test_backoff_does_not_retry_other_errors():
+    import pytest
+
+    from support_agent.retrieval.dense import _with_backoff
+
+    def broken():
+        raise ValueError("bad request")
+
+    with pytest.raises(ValueError):
+        _with_backoff(broken, sleep=lambda s: None)

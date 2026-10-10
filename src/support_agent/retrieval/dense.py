@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import time
 from typing import Protocol
 
 import numpy as np
@@ -22,7 +23,10 @@ class MistralEmbedder:
     """Embeddings via the Mistral API (model: mistral-embed)."""
 
     def __init__(self, model: str = "mistral-embed", batch_size: int = 32):
-        from mistralai import Mistral  # optional dependency
+        try:  # mistralai >= 2.x moved the client into mistralai.client
+            from mistralai.client import Mistral
+        except ImportError:  # mistralai 1.x
+            from mistralai import Mistral
 
         self.client = Mistral(api_key=get_env("MISTRAL_API_KEY"))
         self.model = model
@@ -32,9 +36,21 @@ class MistralEmbedder:
     def embed(self, texts: list[str]) -> np.ndarray:
         vectors = []
         for i in range(0, len(texts), self.batch_size):
-            resp = self.client.embeddings.create(model=self.model, inputs=texts[i : i + self.batch_size])
+            batch = texts[i : i + self.batch_size]
+            resp = _with_backoff(lambda: self.client.embeddings.create(model=self.model, inputs=batch))
             vectors.extend(d.embedding for d in resp.data)
         return np.asarray(vectors, dtype=np.float32)
+
+
+def _with_backoff(call, max_retries: int = 6, base_delay: float = 1.0, sleep=time.sleep):
+    """Retry `call` on HTTP 429 (rate limit) with exponential backoff: 1s, 2s, 4s, ..."""
+    for attempt in range(max_retries + 1):
+        try:
+            return call()
+        except Exception as e:
+            if getattr(e, "status_code", None) != 429 or attempt == max_retries:
+                raise
+            sleep(base_delay * 2**attempt)
 
 
 class LocalEmbedder:
