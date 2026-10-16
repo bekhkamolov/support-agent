@@ -1,0 +1,337 @@
+[
+ {
+  "label_id": "L01",
+  "case_id": "p18",
+  "model": "ministral-14b-latest",
+  "category": "policy",
+  "judge_input": {
+   "customer": [
+    "Can I get an invoice with my company's VAT number?"
+   ],
+   "context": [
+    "[search_policies] {\"found\":true,\"excerpts\":[{\"doc_id\":\"invoices\",\"title\":\"Invoices and VAT\",\"text\":\"Invoices and VAT. An invoice is attached to the shipping confirmation email as a PDF and can be downloaded again in \\\"My Orders\\\". Prices include German VAT of 19 percent (7 percent for books). Business customers can add a company name and VAT ID in their account before ordering; invoices cannot be changed to a company address after they are issued.\"},{\"doc_id\":\"shipping-eu\",\"title\":\"Shipping to other EU countries\",\"text\":\"Shipping to other EU countries. We deliver to all EU countries plus Switzerland and Norway. Standard EU shipping takes 4 to 8 business days and costs EUR 9.95, free above EUR 80. Express is not available outside Germany and Austria. For Switzerland and Norway, customs duties and import VAT may be charged by the carrier on delivery; these are paid by the recipient.\"},{\"doc_id\":\"refunds-partial\",\"title\":\"Partial refunds and deductions\",\"text\":\"Partial refunds and deductions. If a returned item shows signs of use, missing tags, or damage caused by the customer, we may issue a partial refund of up to 50 percent of the item price after inspection. Return label costs for non-free countries (EUR 6.95) are deducted from the refund. Discount codes used on the original order are not refunded as cash; if the remaining order no longer meets the code's minimum value, the discount is recalculated.\"},{\"doc_id\":\"discount-codes\",\"title\":\"Discount and voucher codes\",\"text\":\"Discount and voucher codes. Only one discount code can be used per order. Codes are entered at checkout and cannot be applied after the order is placed. Codes do not apply to gift cards or items marked \\\"Final sale\\\". If a code does not work, check the expiry date and the minimum order value shown in the voucher email.\"},{\"doc_id\":\"tracking\",\"title\":\"How to track an order\",\"text\":\"How to track an order. Once your order is dispatched, you receive an email with a tracking number and link. You can also see the current status in \\\"My Orders\\\" or ask the support assistant for the status of an order by giving your order number. Order numbers start with \\\"NW-\\\" followed by six digits.\"}],\"note\":\"\"}"
+   ],
+   "reply": "Yes, you can add your company's VAT number to your account before ordering, and invoices will be issued to your company. However, once the invoice is issued, the company address cannot be changed. The invoice is also attached to your shipping confirmation email and can be downloaded in \"My Orders\".",
+   "reference": "Invoices and VAT\nAn invoice is attached to the shipping confirmation email as a PDF and can be downloaded again in \"My Orders\". Prices include German VAT of 19 percent (7 percent for books). Business customers can add a company name and VAT ID in their account before ordering; invoices cannot be changed to a company address after they are issued."
+  }
+ },
+ {
+  "label_id": "L02",
+  "case_id": "p21",
+  "model": "ministral-3b-latest",
+  "category": "policy",
+  "judge_input": {
+   "customer": [
+    "Can I use two promo codes on one order?"
+   ],
+   "context": [
+    "[search_policies] {\"found\":true,\"excerpts\":[{\"doc_id\":\"discount-codes\",\"title\":\"Discount and voucher codes\",\"text\":\"Discount and voucher codes. Only one discount code can be used per order. Codes are entered at checkout and cannot be applied after the order is placed. Codes do not apply to gift cards or items marked \\\"Final sale\\\". If a code does not work, check the expiry date and the minimum order value shown in the voucher email.\"},{\"doc_id\":\"gift-cards\",\"title\":\"Gift cards\",\"text\":\"Gift cards. Gift cards are available from EUR 10 to EUR 500 and are valid for 3 years from purchase. They can be combined with other payment methods, but not with other gift cards bought with a promotional discount. Gift cards cannot be exchanged for cash. A lost gift card code can be blocked and reissued if you can show the purchase receipt.\"},{\"doc_id\":\"refunds-partial\",\"title\":\"Partial refunds and deductions\",\"text\":\"Partial refunds and deductions. If a returned item shows signs of use, missing tags, or damage caused by the customer, we may issue a partial refund of up to 50 percent of the item price after inspection. Return label costs for non-free countries (EUR 6.95) are deducted from the refund. Discount codes used on the original order are not refunded as cash; if the remaining order no longer meets the code's minimum value, the discount is recalculated.\"},{\"doc_id\":\"invoices\",\"title\":\"Invoices and VAT\",\"text\":\"Invoices and VAT. An invoice is attached to the shipping confirmation email as a PDF and can be downloaded again in \\\"My Orders\\\". Prices include German VAT of 19 percent (7 percent for books). Business customers can add a company name and VAT ID in their account before ordering; invoices cannot be changed to a company address after they are issued.\"},{\"doc_id\":\"price-match\",\"title\":\"Price changes after purchase\",\"text\":\"Price changes after purchase. We do not offer price matching with other shops. If the price of an item you bought drops on nordwind.de within 7 days of your order, contact support and we will refund the difference as a voucher. This does not apply to flash sales, outlet items, or discounts from codes.\"}],\"note\":\"\"}"
+   ],
+   "reply": "No, you can only use one promo code per order. Codes must be entered at checkout and cannot be combined.",
+   "reference": "Discount and voucher codes\nOnly one discount code can be used per order. Codes are entered at checkout and cannot be applied after the order is placed. Codes do not apply to gift cards or items marked \"Final sale\". If a code does not work, check the expiry date and the minimum order value shown in the voucher email."
+  }
+ },
+ {
+  "label_id": "L03",
+  "case_id": "p20",
+  "model": "ministral-8b-latest",
+  "category": "policy",
+  "judge_input": {
+   "customer": [
+    "Can I turn my voucher balance into cash?"
+   ],
+   "context": [
+    "[search_policies] {\"found\":true,\"excerpts\":[{\"doc_id\":\"gift-cards\",\"title\":\"Gift cards\",\"text\":\"Gift cards. Gift cards are available from EUR 10 to EUR 500 and are valid for 3 years from purchase. They can be combined with other payment methods, but not with other gift cards bought with a promotional discount. Gift cards cannot be exchanged for cash. A lost gift card code can be blocked and reissued if you can show the purchase receipt.\"},{\"doc_id\":\"discount-codes\",\"title\":\"Discount and voucher codes\",\"text\":\"Discount and voucher codes. Only one discount code can be used per order. Codes are entered at checkout and cannot be applied after the order is placed. Codes do not apply to gift cards or items marked \\\"Final sale\\\". If a code does not work, check the expiry date and the minimum order value shown in the voucher email.\"},{\"doc_id\":\"refunds-partial\",\"title\":\"Partial refunds and deductions\",\"text\":\"Partial refunds and deductions. If a returned item shows signs of use, missing tags, or damage caused by the customer, we may issue a partial refund of up to 50 percent of the item price after inspection. Return label costs for non-free countries (EUR 6.95) are deducted from the refund. Discount codes used on the original order are not refunded as cash; if the remaining order no longer meets the code's minimum value, the discount is recalculated.\"},{\"doc_id\":\"price-match\",\"title\":\"Price changes after purchase\",\"text\":\"Price changes after purchase. We do not offer price matching with other shops. If the price of an item you bought drops on nordwind.de within 7 days of your order, contact support and we will refund the difference as a voucher. This does not apply to flash sales, outlet items, or discounts from codes.\"},{\"doc_id\":\"invoices\",\"title\":\"Invoices and VAT\",\"text\":\"Invoices and VAT. An invoice is attached to the shipping confirmation email as a PDF and can be downloaded again in \\\"My Orders\\\". Prices include German VAT of 19 percent (7 percent for books). Business customers can add a company name and VAT ID in their account before ordering; invoices cannot be changed to a company address after they are issued.\"}],\"note\":\"\"}",
+    "[escalate_to_human] Ticket TK-00001 created. Human support is available Mon-Fri 8:00-20:00 and Sat 9:00-16:00 (CET); average response time is under 4 hours on business days."
+   ],
+   "reply": "I’m sorry, but our policy does not allow voucher balances to be converted into cash. A human colleague will assist you further—your ticket (TK-00001) is now open. They’ll be available Monday–Friday 8:00–20:00 CET or Saturday 9:00–16:00 CET, with a typical response time under 4 hours on business days.",
+   "reference": "Gift cards\nGift cards are available from EUR 10 to EUR 500 and are valid for 3 years from purchase. They can be combined with other payment methods, but not with other gift cards bought with a promotional discount. Gift cards cannot be exchanged for cash. A lost gift card code can be blocked and reissued if you can show the purchase receipt."
+  }
+ },
+ {
+  "label_id": "L04",
+  "case_id": "p10",
+  "model": "ministral-14b-latest",
+  "category": "policy",
+  "judge_input": {
+   "customer": [
+    "How much does delivery cost in Germany?"
+   ],
+   "context": [
+    "[search_policies] {\"found\":true,\"excerpts\":[{\"doc_id\":\"shipping-germany\",\"title\":\"Shipping within Germany\",\"text\":\"Shipping within Germany. Standard shipping in Germany takes 2 to 4 business days and costs EUR 4.95. Orders above EUR 50 ship free. Express shipping delivers the next business day if ordered before 14:00 and costs EUR 9.95. We ship with DHL and Hermes; the carrier is chosen automatically and shown in the shipping confirmation email.\"},{\"doc_id\":\"shipping-eu\",\"title\":\"Shipping to other EU countries\",\"text\":\"Shipping to other EU countries. We deliver to all EU countries plus Switzerland and Norway. Standard EU shipping takes 4 to 8 business days and costs EUR 9.95, free above EUR 80. Express is not available outside Germany and Austria. For Switzerland and Norway, customs duties and import VAT may be charged by the carrier on delivery; these are paid by the recipient.\"},{\"doc_id\":\"returns-general\",\"title\":\"Returns: general policy\",\"text\":\"Returns: general policy. Customers can return most items within 30 days of delivery. The 30-day window starts on the day the parcel is delivered, not the order date. Items must be unused, in original condition, and with all tags attached. Returns are free of charge for customers in Germany and Austria. For other EU countries, a return label costs EUR 6.95, which is deducted from the refund. To start a return, open \\\"My Orders\\\", select the item and choose \\\"Return item\\\", or ask\"},{\"doc_id\":\"invoices\",\"title\":\"Invoices and VAT\",\"text\":\"Invoices and VAT. An invoice is attached to the shipping confirmation email as a PDF and can be downloaded again in \\\"My Orders\\\". Prices include German VAT of 19 percent (7 percent for books). Business customers can add a company name and VAT ID in their account before ordering; invoices cannot be changed to a company address after they are issued.\"},{\"doc_id\":\"membership\",\"title\":\"Nordwind Plus membership\",\"text\":\"Nordwind Plus membership. Nordwind Plus costs EUR 29 per year and includes free express shipping in Germany, early access to sales, and an extended return window of 60 days instead of 30. Membership renews automatically and can be cancelled at any time before the renewal date; there are no partial refunds for the remaining months.\"}],\"note\":\"\"}"
+   ],
+   "reply": "Standard shipping in Germany costs **EUR 4.95** and takes 2 to 4 business days. If your order is over **EUR 50**, delivery is free. Express shipping (next business day) costs **EUR 9.95** if ordered before 14:00.",
+   "reference": "Shipping within Germany\nStandard shipping in Germany takes 2 to 4 business days and costs EUR 4.95. Orders above EUR 50 ship free. Express shipping delivers the next business day if ordered before 14:00 and costs EUR 9.95. We ship with DHL and Hermes; the carrier is chosen automatically and shown in the shipping confirmation email."
+  }
+ },
+ {
+  "label_id": "L05",
+  "case_id": "p04",
+  "model": "ministral-3b-latest",
+  "category": "policy",
+  "judge_input": {
+   "customer": [
+    "I opened a lipstick but don't like the colour, can I return it?"
+   ],
+   "context": [
+    "[search_policies] {\"found\":true,\"excerpts\":[{\"doc_id\":\"returns-exceptions\",\"title\":\"Items that cannot be returned\",\"text\":\"Items that cannot be returned. Some items are excluded from returns for hygiene or legal reasons: underwear and swimwear with a removed hygiene seal, opened cosmetics, earrings, personalised or engraved products, gift cards, and downloadable software once the licence key has been revealed. Sealed headphones and in-ear products can only be returned if the original seal is unbroken. Items marked \\\"Final sale\\\" in the product page are also non-returnable.\"},{\"doc_id\":\"returns-general\",\"title\":\"Returns: general policy\",\"text\":\"Returns: general policy. Customers can return most items within 30 days of delivery. The 30-day window starts on the day the parcel is delivered, not the order date. Items must be unused, in original condition, and with all tags attached. Returns are free of charge for customers in Germany and Austria. For other EU countries, a return label costs EUR 6.95, which is deducted from the refund. To start a return, open \\\"My Orders\\\", select the item and choose \\\"Return item\\\", or ask\"},{\"doc_id\":\"returns-general\",\"title\":\"Returns: general policy\",\"text\":\"Returns: general policy. deducted from the refund. To start a return, open \\\"My Orders\\\", select the item and choose \\\"Return item\\\", or ask the support assistant to start the return for you.\"},{\"doc_id\":\"returns-damaged\",\"title\":\"Damaged or defective items\",\"text\":\"Damaged or defective items. If an item arrives damaged or stops working, report it within 14 days of delivery with a photo of the damage. Damaged items are not counted against the 30-day return window. We offer a free replacement or a full refund, including the original shipping costs. For electronics, the statutory warranty of 2 years applies in addition; after 14 days, defects are handled as warranty claims (see \\\"Warranty for electronics\\\").\"},{\"doc_id\":\"refunds-partial\",\"title\":\"Partial refunds and deductions\",\"text\":\"Partial refunds and deductions. If a returned item shows signs of use, missing tags, or damage caused by the customer, we may issue a partial refund of up to 50 percent of the item price after inspection. Return label costs for non-free countries (EUR 6.95) are deducted from the refund. Discount codes used on the original order are not refunded as cash; if the remaining order no longer meets the code's minimum value, the discount is recalculated.\"}],\"note\":\"\"}",
+    "[escalate_to_human] Ticket TK-00001 created. Human support is available Mon-Fri 8:00-20:00 and Sat 9:00-16:00 (CET); average response time is under 4 hours on business days."
+   ],
+   "reply": "I’m sorry, but opened cosmetics like lipstick cannot be returned due to hygiene rules. Please contact our human support team—they’ll assist you right away! Your ticket is TK-00001.",
+   "reference": "Items that cannot be returned\nSome items are excluded from returns for hygiene or legal reasons: underwear and swimwear with a removed hygiene seal, opened cosmetics, earrings, personalised or engraved products, gift cards, and downloadable software once the licence key has been revealed. Sealed headphones and in-ear products can only be returned if the original seal is unbroken. Items marked \"Final sale\" in the product page are also non-returnable."
+  }
+ },
+ {
+  "label_id": "L06",
+  "case_id": "p10",
+  "model": "ministral-8b-latest",
+  "category": "policy",
+  "judge_input": {
+   "customer": [
+    "How much does delivery cost in Germany?"
+   ],
+   "context": [
+    "[search_policies] {\"found\":true,\"excerpts\":[{\"doc_id\":\"shipping-germany\",\"title\":\"Shipping within Germany\",\"text\":\"Shipping within Germany. Standard shipping in Germany takes 2 to 4 business days and costs EUR 4.95. Orders above EUR 50 ship free. Express shipping delivers the next business day if ordered before 14:00 and costs EUR 9.95. We ship with DHL and Hermes; the carrier is chosen automatically and shown in the shipping confirmation email.\"},{\"doc_id\":\"shipping-eu\",\"title\":\"Shipping to other EU countries\",\"text\":\"Shipping to other EU countries. We deliver to all EU countries plus Switzerland and Norway. Standard EU shipping takes 4 to 8 business days and costs EUR 9.95, free above EUR 80. Express is not available outside Germany and Austria. For Switzerland and Norway, customs duties and import VAT may be charged by the carrier on delivery; these are paid by the recipient.\"},{\"doc_id\":\"returns-general\",\"title\":\"Returns: general policy\",\"text\":\"Returns: general policy. Customers can return most items within 30 days of delivery. The 30-day window starts on the day the parcel is delivered, not the order date. Items must be unused, in original condition, and with all tags attached. Returns are free of charge for customers in Germany and Austria. For other EU countries, a return label costs EUR 6.95, which is deducted from the refund. To start a return, open \\\"My Orders\\\", select the item and choose \\\"Return item\\\", or ask\"},{\"doc_id\":\"invoices\",\"title\":\"Invoices and VAT\",\"text\":\"Invoices and VAT. An invoice is attached to the shipping confirmation email as a PDF and can be downloaded again in \\\"My Orders\\\". Prices include German VAT of 19 percent (7 percent for books). Business customers can add a company name and VAT ID in their account before ordering; invoices cannot be changed to a company address after they are issued.\"},{\"doc_id\":\"membership\",\"title\":\"Nordwind Plus membership\",\"text\":\"Nordwind Plus membership. Nordwind Plus costs EUR 29 per year and includes free express shipping in Germany, early access to sales, and an extended return window of 60 days instead of 30. Membership renews automatically and can be cancelled at any time before the renewal date; there are no partial refunds for the remaining months.\"}],\"note\":\"\"}"
+   ],
+   "reply": "In Germany, standard shipping costs **EUR 4.95** and is free for orders above **EUR 50**. Express shipping (next business day) costs **EUR 9.95** and is available if ordered before 14:00.",
+   "reference": "Shipping within Germany\nStandard shipping in Germany takes 2 to 4 business days and costs EUR 4.95. Orders above EUR 50 ship free. Express shipping delivers the next business day if ordered before 14:00 and costs EUR 9.95. We ship with DHL and Hermes; the carrier is chosen automatically and shown in the shipping confirmation email."
+  }
+ },
+ {
+  "label_id": "L07",
+  "case_id": "p27",
+  "model": "ministral-14b-latest",
+  "category": "policy",
+  "judge_input": {
+   "customer": [
+    "What do I get with the yearly subscription?"
+   ],
+   "context": [
+    "[search_policies] {\"found\":true,\"excerpts\":[{\"doc_id\":\"membership\",\"title\":\"Nordwind Plus membership\",\"text\":\"Nordwind Plus membership. Nordwind Plus costs EUR 29 per year and includes free express shipping in Germany, early access to sales, and an extended return window of 60 days instead of 30. Membership renews automatically and can be cancelled at any time before the renewal date; there are no partial refunds for the remaining months.\"},{\"doc_id\":\"gift-cards\",\"title\":\"Gift cards\",\"text\":\"Gift cards. Gift cards are available from EUR 10 to EUR 500 and are valid for 3 years from purchase. They can be combined with other payment methods, but not with other gift cards bought with a promotional discount. Gift cards cannot be exchanged for cash. A lost gift card code can be blocked and reissued if you can show the purchase receipt.\"},{\"doc_id\":\"warranty-electronics\",\"title\":\"Warranty for electronics\",\"text\":\"Warranty for electronics. All electronics come with the statutory 2-year warranty from the delivery date. Some brands offer an additional manufacturer guarantee, shown on the product page. For warranty claims, contact support with the order number and a description of the defect; we will send a free return label and either repair, replace, or refund the product. Repairs typically take 2 to 3 weeks.\"},{\"doc_id\":\"invoices\",\"title\":\"Invoices and VAT\",\"text\":\"Invoices and VAT. An invoice is attached to the shipping confirmation email as a PDF and can be downloaded again in \\\"My Orders\\\". Prices include German VAT of 19 percent (7 percent for books). Business customers can add a company name and VAT ID in their account before ordering; invoices cannot be changed to a company address after they are issued.\"},{\"doc_id\":\"returns-damaged\",\"title\":\"Damaged or defective items\",\"text\":\"Damaged or defective items. If an item arrives damaged or stops working, report it within 14 days of delivery with a photo of the damage. Damaged items are not counted against the 30-day return window. We offer a free replacement or a full refund, including the original shipping costs. For electronics, the statutory warranty of 2 years applies in addition; after 14 days, defects are handled as warranty claims (see \\\"Warranty for electronics\\\").\"}],\"note\":\"\"}"
+   ],
+   "reply": "With the yearly Nordwind Plus subscription (EUR 29), you get free express shipping in Germany, early access to sales, and an extended return window of 60 days. The membership renews automatically but can be cancelled anytime before renewal.",
+   "reference": "Nordwind Plus membership\nNordwind Plus costs EUR 29 per year and includes free express shipping in Germany, early access to sales, and an extended return window of 60 days instead of 30. Membership renews automatically and can be cancelled at any time before the renewal date; there are no partial refunds for the remaining months."
+  }
+ },
+ {
+  "label_id": "L08",
+  "case_id": "p01",
+  "model": "ministral-3b-latest",
+  "category": "policy",
+  "judge_input": {
+   "customer": [
+    "How many days do I have to send something back?"
+   ],
+   "context": [
+    "[search_policies] {\"found\":true,\"excerpts\":[{\"doc_id\":\"returns-general\",\"title\":\"Returns: general policy\",\"text\":\"Returns: general policy. Customers can return most items within 30 days of delivery. The 30-day window starts on the day the parcel is delivered, not the order date. Items must be unused, in original condition, and with all tags attached. Returns are free of charge for customers in Germany and Austria. For other EU countries, a return label costs EUR 6.95, which is deducted from the refund. To start a return, open \\\"My Orders\\\", select the item and choose \\\"Return item\\\", or ask\"},{\"doc_id\":\"returns-damaged\",\"title\":\"Damaged or defective items\",\"text\":\"Damaged or defective items. If an item arrives damaged or stops working, report it within 14 days of delivery with a photo of the damage. Damaged items are not counted against the 30-day return window. We offer a free replacement or a full refund, including the original shipping costs. For electronics, the statutory warranty of 2 years applies in addition; after 14 days, defects are handled as warranty claims (see \\\"Warranty for electronics\\\").\"},{\"doc_id\":\"sustainability\",\"title\":\"Packaging and sustainability\",\"text\":\"Packaging and sustainability. Parcels are shipped in recycled cardboard, and the return label is included in the box. Returned items in perfect condition are resold; others are refurbished or donated, never destroyed. Customers can choose \\\"bundle my order\\\" at checkout to receive all items in one parcel, even if this takes one or two days longer.\"},{\"doc_id\":\"warranty-electronics\",\"title\":\"Warranty for electronics\",\"text\":\"Warranty for electronics. All electronics come with the statutory 2-year warranty from the delivery date. Some brands offer an additional manufacturer guarantee, shown on the product page. For warranty claims, contact support with the order number and a description of the defect; we will send a free return label and either repair, replace, or refund the product. Repairs typically take 2 to 3 weeks.\"},{\"doc_id\":\"returns-general\",\"title\":\"Returns: general policy\",\"text\":\"Returns: general policy. deducted from the refund. To start a return, open \\\"My Orders\\\", select the item and choose \\\"Return item\\\", or ask the support assistant to start the return for you.\"}],\"note\":\"\"}"
+   ],
+   "reply": "You have **30 days** from delivery to return most items in good condition. For EU countries outside Germany or Austria, a return label costs EUR 6.95.",
+   "reference": "Returns: general policy\nCustomers can return most items within 30 days of delivery. The 30-day window starts on the day the parcel is delivered, not the order date. Items must be unused, in original condition, and with all tags attached. Returns are free of charge for customers in Germany and Austria. For other EU countries, a return label costs EUR 6.95, which is deducted from the refund. To start a return, open \"My Orders\", select the item and choose \"Return item\", or ask the support assistant to start the return for you."
+  }
+ },
+ {
+  "label_id": "L09",
+  "case_id": "p27",
+  "model": "ministral-8b-latest",
+  "category": "policy",
+  "judge_input": {
+   "customer": [
+    "What do I get with the yearly subscription?"
+   ],
+   "context": [
+    "[search_policies] {\"found\":true,\"excerpts\":[{\"doc_id\":\"membership\",\"title\":\"Nordwind Plus membership\",\"text\":\"Nordwind Plus membership. Nordwind Plus costs EUR 29 per year and includes free express shipping in Germany, early access to sales, and an extended return window of 60 days instead of 30. Membership renews automatically and can be cancelled at any time before the renewal date; there are no partial refunds for the remaining months.\"},{\"doc_id\":\"gift-cards\",\"title\":\"Gift cards\",\"text\":\"Gift cards. Gift cards are available from EUR 10 to EUR 500 and are valid for 3 years from purchase. They can be combined with other payment methods, but not with other gift cards bought with a promotional discount. Gift cards cannot be exchanged for cash. A lost gift card code can be blocked and reissued if you can show the purchase receipt.\"},{\"doc_id\":\"warranty-electronics\",\"title\":\"Warranty for electronics\",\"text\":\"Warranty for electronics. All electronics come with the statutory 2-year warranty from the delivery date. Some brands offer an additional manufacturer guarantee, shown on the product page. For warranty claims, contact support with the order number and a description of the defect; we will send a free return label and either repair, replace, or refund the product. Repairs typically take 2 to 3 weeks.\"},{\"doc_id\":\"invoices\",\"title\":\"Invoices and VAT\",\"text\":\"Invoices and VAT. An invoice is attached to the shipping confirmation email as a PDF and can be downloaded again in \\\"My Orders\\\". Prices include German VAT of 19 percent (7 percent for books). Business customers can add a company name and VAT ID in their account before ordering; invoices cannot be changed to a company address after they are issued.\"},{\"doc_id\":\"returns-damaged\",\"title\":\"Damaged or defective items\",\"text\":\"Damaged or defective items. If an item arrives damaged or stops working, report it within 14 days of delivery with a photo of the damage. Damaged items are not counted against the 30-day return window. We offer a free replacement or a full refund, including the original shipping costs. For electronics, the statutory warranty of 2 years applies in addition; after 14 days, defects are handled as warranty claims (see \\\"Warranty for electronics\\\").\"}],\"note\":\"\"}",
+    "[search_policies] {\"found\":true,\"excerpts\":[{\"doc_id\":\"membership\",\"title\":\"Nordwind Plus membership\",\"text\":\"Nordwind Plus membership. Nordwind Plus costs EUR 29 per year and includes free express shipping in Germany, early access to sales, and an extended return window of 60 days instead of 30. Membership renews automatically and can be cancelled at any time before the renewal date; there are no partial refunds for the remaining months.\"},{\"doc_id\":\"payment-methods\",\"title\":\"Accepted payment methods\",\"text\":\"Accepted payment methods. We accept Visa, Mastercard, American Express, PayPal, Klarna (pay later in 30 days), Apple Pay, Google Pay and Nordwind gift cards. Cash on delivery is not available. Your card is charged when the order is dispatched, not when it is placed. For Klarna, the 30-day payment period starts on the dispatch date.\"},{\"doc_id\":\"price-match\",\"title\":\"Price changes after purchase\",\"text\":\"Price changes after purchase. We do not offer price matching with other shops. If the price of an item you bought drops on nordwind.de within 7 days of your order, contact support and we will refund the difference as a voucher. This does not apply to flash sales, outlet items, or discounts from codes.\"},{\"doc_id\":\"gift-cards\",\"title\":\"Gift cards\",\"text\":\"Gift cards. Gift cards are available from EUR 10 to EUR 500 and are valid for 3 years from purchase. They can be combined with other payment methods, but not with other gift cards bought with a promotional discount. Gift cards cannot be exchanged for cash. A lost gift card code can be blocked and reissued if you can show the purchase receipt.\"},{\"doc_id\":\"shipping-eu\",\"title\":\"Shipping to other EU countries\",\"text\":\"Shipping to other EU countries. We deliver to all EU countries plus Switzerland and Norway. Standard EU shipping takes 4 to 8 business days and costs EUR 9.95, free above EUR 80. Express is not available outside Germany and Austria. For Switzerland and Norway, customs duties and import VAT may be charged by the carrier on delivery; these are paid by the recipient.\"}],\"note\":\"\"}"
+   ],
+   "reply": "With the Nordwind Plus yearly subscription (EUR 29/year), you get:\n• Free express shipping in Germany\n• Early access to sales\n• An extended return window of 60 days (instead of 30)\n\nThe membership renews automatically and can be cancelled anytime before renewal.",
+   "reference": "Nordwind Plus membership\nNordwind Plus costs EUR 29 per year and includes free express shipping in Germany, early access to sales, and an extended return window of 60 days instead of 30. Membership renews automatically and can be cancelled at any time before the renewal date; there are no partial refunds for the remaining months."
+  }
+ },
+ {
+  "label_id": "L10",
+  "case_id": "p21",
+  "model": "ministral-14b-latest",
+  "category": "policy",
+  "judge_input": {
+   "customer": [
+    "Can I use two promo codes on one order?"
+   ],
+   "context": [
+    "[search_policies] {\"found\":true,\"excerpts\":[{\"doc_id\":\"discount-codes\",\"title\":\"Discount and voucher codes\",\"text\":\"Discount and voucher codes. Only one discount code can be used per order. Codes are entered at checkout and cannot be applied after the order is placed. Codes do not apply to gift cards or items marked \\\"Final sale\\\". If a code does not work, check the expiry date and the minimum order value shown in the voucher email.\"},{\"doc_id\":\"gift-cards\",\"title\":\"Gift cards\",\"text\":\"Gift cards. Gift cards are available from EUR 10 to EUR 500 and are valid for 3 years from purchase. They can be combined with other payment methods, but not with other gift cards bought with a promotional discount. Gift cards cannot be exchanged for cash. A lost gift card code can be blocked and reissued if you can show the purchase receipt.\"},{\"doc_id\":\"refunds-partial\",\"title\":\"Partial refunds and deductions\",\"text\":\"Partial refunds and deductions. If a returned item shows signs of use, missing tags, or damage caused by the customer, we may issue a partial refund of up to 50 percent of the item price after inspection. Return label costs for non-free countries (EUR 6.95) are deducted from the refund. Discount codes used on the original order are not refunded as cash; if the remaining order no longer meets the code's minimum value, the discount is recalculated.\"},{\"doc_id\":\"payment-failed\",\"title\":\"Payment declined or failed\",\"text\":\"Payment declined or failed. If a payment fails, the order is kept for 48 hours so you can retry with another method in \\\"My Orders\\\". Common causes are 3-D Secure verification not completed, an expired card, or a daily card limit. We never see your full card details and cannot tell you why a bank declined a payment; please contact your bank in that case.\"},{\"doc_id\":\"sustainability\",\"title\":\"Packaging and sustainability\",\"text\":\"Packaging and sustainability. Parcels are shipped in recycled cardboard, and the return label is included in the box. Returned items in perfect condition are resold; others are refurbished or donated, never destroyed. Customers can choose \\\"bundle my order\\\" at checkout to receive all items in one parcel, even if this takes one or two days longer.\"}],\"note\":\"\"}"
+   ],
+   "reply": "Unfortunately, you can only use one promo code per order, as stated in our discount policy. Each code is applied at checkout and cannot be combined with another. Thank you for understanding!",
+   "reference": "Discount and voucher codes\nOnly one discount code can be used per order. Codes are entered at checkout and cannot be applied after the order is placed. Codes do not apply to gift cards or items marked \"Final sale\". If a code does not work, check the expiry date and the minimum order value shown in the voucher email."
+  }
+ },
+ {
+  "label_id": "L11",
+  "case_id": "p24",
+  "model": "ministral-3b-latest",
+  "category": "policy",
+  "judge_input": {
+   "customer": [
+    "How long does a repair take?"
+   ],
+   "context": [
+    "[search_policies] {\"found\":true,\"excerpts\":[{\"doc_id\":\"warranty-electronics\",\"title\":\"Warranty for electronics\",\"text\":\"Warranty for electronics. All electronics come with the statutory 2-year warranty from the delivery date. Some brands offer an additional manufacturer guarantee, shown on the product page. For warranty claims, contact support with the order number and a description of the defect; we will send a free return label and either repair, replace, or refund the product. Repairs typically take 2 to 3 weeks.\"},{\"doc_id\":\"returns-damaged\",\"title\":\"Damaged or defective items\",\"text\":\"Damaged or defective items. If an item arrives damaged or stops working, report it within 14 days of delivery with a photo of the damage. Damaged items are not counted against the 30-day return window. We offer a free replacement or a full refund, including the original shipping costs. For electronics, the statutory warranty of 2 years applies in addition; after 14 days, defects are handled as warranty claims (see \\\"Warranty for electronics\\\").\"},{\"doc_id\":\"returns-general\",\"title\":\"Returns: general policy\",\"text\":\"Returns: general policy. Customers can return most items within 30 days of delivery. The 30-day window starts on the day the parcel is delivered, not the order date. Items must be unused, in original condition, and with all tags attached. Returns are free of charge for customers in Germany and Austria. For other EU countries, a return label costs EUR 6.95, which is deducted from the refund. To start a return, open \\\"My Orders\\\", select the item and choose \\\"Return item\\\", or ask\"},{\"doc_id\":\"shipping-delays\",\"title\":\"My parcel is late\",\"text\":\"My parcel is late. If your parcel has not arrived within the expected delivery time, first check the tracking link in your shipping email. Tracking can take up to 24 hours to update after dispatch. If there has been no tracking update for 5 business days, contact support and we will open an investigation with the carrier. If the parcel is confirmed lost, we send a replacement or refund the order in full.\"},{\"doc_id\":\"refunds-timing\",\"title\":\"When will I get my refund?\",\"text\":\"When will I get my refund?. Refunds are issued after the returned parcel arrives at our warehouse and passes inspection, which usually takes 3 to 5 business days after arrival. The money is sent back to the original payment method. Card refunds appear within 5 to 10 business days depending on the bank; PayPal refunds usually appear within 24 hours. Gift card payments are refunded as a new gift card. You will receive an email as soon as the refund has been issued.\"}],\"note\":\"\"}",
+    "[escalate_to_human] Ticket TK-00001 created. Human support is available Mon-Fri 8:00-20:00 and Sat 9:00-16:00 (CET); average response time is under 4 hours on business days."
+   ],
+   "reply": "I checked our policies, but they only specify repair times for electronics (2–3 weeks). For other items, please let a colleague handle this—you’ll be connected shortly. Your ticket is TK-00001.",
+   "reference": "Warranty for electronics\nAll electronics come with the statutory 2-year warranty from the delivery date. Some brands offer an additional manufacturer guarantee, shown on the product page. For warranty claims, contact support with the order number and a description of the defect; we will send a free return label and either repair, replace, or refund the product. Repairs typically take 2 to 3 weeks."
+  }
+ },
+ {
+  "label_id": "L12",
+  "case_id": "p01",
+  "model": "ministral-8b-latest",
+  "category": "policy",
+  "judge_input": {
+   "customer": [
+    "How many days do I have to send something back?"
+   ],
+   "context": [
+    "[search_policies] {\"found\":true,\"excerpts\":[{\"doc_id\":\"returns-general\",\"title\":\"Returns: general policy\",\"text\":\"Returns: general policy. Customers can return most items within 30 days of delivery. The 30-day window starts on the day the parcel is delivered, not the order date. Items must be unused, in original condition, and with all tags attached. Returns are free of charge for customers in Germany and Austria. For other EU countries, a return label costs EUR 6.95, which is deducted from the refund. To start a return, open \\\"My Orders\\\", select the item and choose \\\"Return item\\\", or ask\"},{\"doc_id\":\"returns-damaged\",\"title\":\"Damaged or defective items\",\"text\":\"Damaged or defective items. If an item arrives damaged or stops working, report it within 14 days of delivery with a photo of the damage. Damaged items are not counted against the 30-day return window. We offer a free replacement or a full refund, including the original shipping costs. For electronics, the statutory warranty of 2 years applies in addition; after 14 days, defects are handled as warranty claims (see \\\"Warranty for electronics\\\").\"},{\"doc_id\":\"sustainability\",\"title\":\"Packaging and sustainability\",\"text\":\"Packaging and sustainability. Parcels are shipped in recycled cardboard, and the return label is included in the box. Returned items in perfect condition are resold; others are refurbished or donated, never destroyed. Customers can choose \\\"bundle my order\\\" at checkout to receive all items in one parcel, even if this takes one or two days longer.\"},{\"doc_id\":\"returns-general\",\"title\":\"Returns: general policy\",\"text\":\"Returns: general policy. deducted from the refund. To start a return, open \\\"My Orders\\\", select the item and choose \\\"Return item\\\", or ask the support assistant to start the return for you.\"},{\"doc_id\":\"refunds-partial\",\"title\":\"Partial refunds and deductions\",\"text\":\"Partial refunds and deductions. If a returned item shows signs of use, missing tags, or damage caused by the customer, we may issue a partial refund of up to 50 percent of the item price after inspection. Return label costs for non-free countries (EUR 6.95) are deducted from the refund. Discount codes used on the original order are not refunded as cash; if the remaining order no longer meets the code's minimum value, the discount is recalculated.\"}],\"note\":\"\"}"
+   ],
+   "reply": "You have 30 days from the delivery date to return most items. The return period starts on the day your parcel was delivered, not the order date. Please ensure the items are unused and in their original condition.",
+   "reference": "Returns: general policy\nCustomers can return most items within 30 days of delivery. The 30-day window starts on the day the parcel is delivered, not the order date. Items must be unused, in original condition, and with all tags attached. Returns are free of charge for customers in Germany and Austria. For other EU countries, a return label costs EUR 6.95, which is deducted from the refund. To start a return, open \"My Orders\", select the item and choose \"Return item\", or ask the support assistant to start the return for you."
+  }
+ },
+ {
+  "label_id": "L13",
+  "case_id": "p20",
+  "model": "ministral-14b-latest",
+  "category": "policy",
+  "judge_input": {
+   "customer": [
+    "Can I turn my voucher balance into cash?"
+   ],
+   "context": [
+    "[search_policies] {\"found\":true,\"excerpts\":[{\"doc_id\":\"discount-codes\",\"title\":\"Discount and voucher codes\",\"text\":\"Discount and voucher codes. Only one discount code can be used per order. Codes are entered at checkout and cannot be applied after the order is placed. Codes do not apply to gift cards or items marked \\\"Final sale\\\". If a code does not work, check the expiry date and the minimum order value shown in the voucher email.\"},{\"doc_id\":\"gift-cards\",\"title\":\"Gift cards\",\"text\":\"Gift cards. Gift cards are available from EUR 10 to EUR 500 and are valid for 3 years from purchase. They can be combined with other payment methods, but not with other gift cards bought with a promotional discount. Gift cards cannot be exchanged for cash. A lost gift card code can be blocked and reissued if you can show the purchase receipt.\"},{\"doc_id\":\"refunds-partial\",\"title\":\"Partial refunds and deductions\",\"text\":\"Partial refunds and deductions. If a returned item shows signs of use, missing tags, or damage caused by the customer, we may issue a partial refund of up to 50 percent of the item price after inspection. Return label costs for non-free countries (EUR 6.95) are deducted from the refund. Discount codes used on the original order are not refunded as cash; if the remaining order no longer meets the code's minimum value, the discount is recalculated.\"},{\"doc_id\":\"price-match\",\"title\":\"Price changes after purchase\",\"text\":\"Price changes after purchase. We do not offer price matching with other shops. If the price of an item you bought drops on nordwind.de within 7 days of your order, contact support and we will refund the difference as a voucher. This does not apply to flash sales, outlet items, or discounts from codes.\"},{\"doc_id\":\"invoices\",\"title\":\"Invoices and VAT\",\"text\":\"Invoices and VAT. An invoice is attached to the shipping confirmation email as a PDF and can be downloaded again in \\\"My Orders\\\". Prices include German VAT of 19 percent (7 percent for books). Business customers can add a company name and VAT ID in their account before ordering; invoices cannot be changed to a company address after they are issued.\"}],\"note\":\"\"}"
+   ],
+   "reply": "Unfortunately, voucher balances cannot be converted to cash. According to our policy, gift cards and voucher balances are non-refundable and can only be used for purchases on our website. If you have any other questions, feel free to ask!",
+   "reference": "Gift cards\nGift cards are available from EUR 10 to EUR 500 and are valid for 3 years from purchase. They can be combined with other payment methods, but not with other gift cards bought with a promotional discount. Gift cards cannot be exchanged for cash. A lost gift card code can be blocked and reissued if you can show the purchase receipt."
+  }
+ },
+ {
+  "label_id": "L14",
+  "case_id": "p09",
+  "model": "ministral-3b-latest",
+  "category": "policy",
+  "judge_input": {
+   "customer": [
+    "Can I swap my shoes for a bigger size?"
+   ],
+   "context": [
+    "[search_policies] {\"found\":true,\"excerpts\":[{\"doc_id\":\"exchanges\",\"title\":\"Exchanging an item for another size or colour\",\"text\":\"Exchanging an item for another size or colour. We do not swap items directly. To get a different size or colour, return the original item for a refund and place a new order. For shoes and clothing, the size advisor on the product page shows how each brand fits. Tip: place the new order first if the item is low in stock, because returned items are not reserved for you.\"},{\"doc_id\":\"sizing\",\"title\":\"Size guide and fit\",\"text\":\"Size guide and fit. Each clothing and shoe product page has a size chart in centimetres and a fit hint based on customer reviews (\\\"runs small\\\", \\\"true to size\\\", \\\"runs large\\\"). EU, UK and US sizes are converted automatically. If you are between two sizes, the size advisor recommends a size based on items you kept in previous orders.\"},{\"doc_id\":\"returns-general\",\"title\":\"Returns: general policy\",\"text\":\"Returns: general policy. Customers can return most items within 30 days of delivery. The 30-day window starts on the day the parcel is delivered, not the order date. Items must be unused, in original condition, and with all tags attached. Returns are free of charge for customers in Germany and Austria. For other EU countries, a return label costs EUR 6.95, which is deducted from the refund. To start a return, open \\\"My Orders\\\", select the item and choose \\\"Return item\\\", or ask\"},{\"doc_id\":\"returns-damaged\",\"title\":\"Damaged or defective items\",\"text\":\"Damaged or defective items. If an item arrives damaged or stops working, report it within 14 days of delivery with a photo of the damage. Damaged items are not counted against the 30-day return window. We offer a free replacement or a full refund, including the original shipping costs. For electronics, the statutory warranty of 2 years applies in addition; after 14 days, defects are handled as warranty claims (see \\\"Warranty for electronics\\\").\"},{\"doc_id\":\"refunds-partial\",\"title\":\"Partial refunds and deductions\",\"text\":\"Partial refunds and deductions. If a returned item shows signs of use, missing tags, or damage caused by the customer, we may issue a partial refund of up to 50 percent of the item price after inspection. Return label costs for non-free countries (EUR 6.95) are deducted from the refund. Discount codes used on the original order are not refunded as cash; if the remaining order no longer meets the code's minimum value, the discount is recalculated.\"}],\"note\":\"\"}",
+    "[get_order_status] Not executed: the customer has not given this order number and e-mail address. Ask the customer for it; do not guess.",
+    "[get_order_status] Not executed: the customer has not given this order number and e-mail address. Ask the customer for it; do not guess.",
+    "[escalate_to_human] Ticket TK-00001 created. Human support is available Mon-Fri 8:00-20:00 and Sat 9:00-16:00 (CET); average response time is under 4 hours on business days."
+   ],
+   "reply": "Could you please confirm your order number (e.g., NW-100001) and the email used for the purchase? I’ll escalate this to a human specialist who can assist you further.",
+   "reference": "Exchanging an item for another size or colour\nWe do not swap items directly. To get a different size or colour, return the original item for a refund and place a new order. For shoes and clothing, the size advisor on the product page shows how each brand fits. Tip: place the new order first if the item is low in stock, because returned items are not reserved for you."
+  }
+ },
+ {
+  "label_id": "L15",
+  "case_id": "t11",
+  "model": "ministral-14b-latest",
+  "category": "order",
+  "judge_input": {
+   "customer": [
+    "Can I return the earrings from NW-100006? My e-mail is farid@example.com"
+   ],
+   "context": [
+    "[get_order_status] {\"order_id\":\"NW-100006\",\"status\":\"delivered\",\"ordered_on\":\"2026-09-28\",\"delivered_on\":\"2026-10-01\",\"carrier\":\"DHL\",\"tracking_no\":\"DHL1000062\",\"country\":\"DE\",\"plus_member\":false,\"return_window_ends\":\"2026-10-31\",\"items\":[{\"sku\":\"EAR-055\",\"name\":\"Silver earrings\",\"category\":\"earrings\",\"price_eur\":39.0,\"returnable_category\":false,\"already_returned\":false},{\"sku\":\"SCF-019\",\"name\":\"Wool scarf\",\"category\":\"accessories\",\"price_eur\":24.9,\"returnable_category\":true,\"already_returned\":false}]}",
+    "[search_policies] {\"found\":true,\"excerpts\":[{\"doc_id\":\"returns-exceptions\",\"title\":\"Items that cannot be returned\",\"text\":\"Items that cannot be returned. Some items are excluded from returns for hygiene or legal reasons: underwear and swimwear with a removed hygiene seal, opened cosmetics, earrings, personalised or engraved products, gift cards, and downloadable software once the licence key has been revealed. Sealed headphones and in-ear products can only be returned if the original seal is unbroken. Items marked \\\"Final sale\\\" in the product page are also non-returnable.\"},{\"doc_id\":\"sustainability\",\"title\":\"Packaging and sustainability\",\"text\":\"Packaging and sustainability. Parcels are shipped in recycled cardboard, and the return label is included in the box. Returned items in perfect condition are resold; others are refurbished or donated, never destroyed. Customers can choose \\\"bundle my order\\\" at checkout to receive all items in one parcel, even if this takes one or two days longer.\"},{\"doc_id\":\"returns-general\",\"title\":\"Returns: general policy\",\"text\":\"Returns: general policy. deducted from the refund. To start a return, open \\\"My Orders\\\", select the item and choose \\\"Return item\\\", or ask the support assistant to start the return for you.\"},{\"doc_id\":\"returns-general\",\"title\":\"Returns: general policy\",\"text\":\"Returns: general policy. Customers can return most items within 30 days of delivery. The 30-day window starts on the day the parcel is delivered, not the order date. Items must be unused, in original condition, and with all tags attached. Returns are free of charge for customers in Germany and Austria. For other EU countries, a return label costs EUR 6.95, which is deducted from the refund. To start a return, open \\\"My Orders\\\", select the item and choose \\\"Return item\\\", or ask\"},{\"doc_id\":\"refunds-partial\",\"title\":\"Partial refunds and deductions\",\"text\":\"Partial refunds and deductions. If a returned item shows signs of use, missing tags, or damage caused by the customer, we may issue a partial refund of up to 50 percent of the item price after inspection. Return label costs for non-free countries (EUR 6.95) are deducted from the refund. Discount codes used on the original order are not refunded as cash; if the remaining order no longer meets the code's minimum value, the discount is recalculated.\"}],\"note\":\"\"}"
+   ],
+   "reply": "Unfortunately, the silver earrings (SKU: EAR-055) from order NW-100006 cannot be returned, as jewelry is excluded from returns for hygiene and legal reasons. You can still return the wool scarf if you wish, as it is returnable. The return window for your order ends on October 31, 2026.",
+   "reference": null
+  }
+ },
+ {
+  "label_id": "L16",
+  "case_id": "o13",
+  "model": "ministral-3b-latest",
+  "category": "out_of_scope",
+  "judge_input": {
+   "customer": [
+    "What will the weather be like in Berlin tomorrow?"
+   ],
+   "context": [
+    "[search_policies] {\"found\":true,\"excerpts\":[{\"doc_id\":\"sizing\",\"title\":\"Size guide and fit\",\"text\":\"Size guide and fit. Each clothing and shoe product page has a size chart in centimetres and a fit hint based on customer reviews (\\\"runs small\\\", \\\"true to size\\\", \\\"runs large\\\"). EU, UK and US sizes are converted automatically. If you are between two sizes, the size advisor recommends a size based on items you kept in previous orders.\"},{\"doc_id\":\"price-match\",\"title\":\"Price changes after purchase\",\"text\":\"Price changes after purchase. We do not offer price matching with other shops. If the price of an item you bought drops on nordwind.de within 7 days of your order, contact support and we will refund the difference as a voucher. This does not apply to flash sales, outlet items, or discounts from codes.\"},{\"doc_id\":\"payment-methods\",\"title\":\"Accepted payment methods\",\"text\":\"Accepted payment methods. We accept Visa, Mastercard, American Express, PayPal, Klarna (pay later in 30 days), Apple Pay, Google Pay and Nordwind gift cards. Cash on delivery is not available. Your card is charged when the order is dispatched, not when it is placed. For Klarna, the 30-day payment period starts on the dispatch date.\"},{\"doc_id\":\"returns-damaged\",\"title\":\"Damaged or defective items\",\"text\":\"Damaged or defective items. If an item arrives damaged or stops working, report it within 14 days of delivery with a photo of the damage. Damaged items are not counted against the 30-day return window. We offer a free replacement or a full refund, including the original shipping costs. For electronics, the statutory warranty of 2 years applies in addition; after 14 days, defects are handled as warranty claims (see \\\"Warranty for electronics\\\").\"},{\"doc_id\":\"shipping-germany\",\"title\":\"Shipping within Germany\",\"text\":\"Shipping within Germany. Standard shipping in Germany takes 2 to 4 business days and costs EUR 4.95. Orders above EUR 50 ship free. Express shipping delivers the next business day if ordered before 14:00 and costs EUR 9.95. We ship with DHL and Hermes; the carrier is chosen automatically and shown in the shipping confirmation email.\"}],\"note\":\"\"}",
+    "[search_policies] {\"found\":false,\"excerpts\":[],\"note\":\"Not executed: you already called this tool with the same arguments. Use the earlier result.\"}"
+   ],
+   "reply": "I can’t help with weather forecasts. For Nordwind’s policies, I’ll always refer to our official documents. Let me know if you need details about returns, shipping, or payments!",
+   "reference": null
+  }
+ },
+ {
+  "label_id": "L17",
+  "case_id": "t08",
+  "model": "ministral-8b-latest",
+  "category": "order",
+  "judge_input": {
+   "customer": [
+    "I want to send back the rain jacket from NW-100002, I changed my mind. Email: ben@example.com"
+   ],
+   "context": [
+    "[get_order_status] {\"order_id\":\"NW-100002\",\"status\":\"delivered\",\"ordered_on\":\"2026-09-15\",\"delivered_on\":\"2026-09-20\",\"carrier\":\"DPD\",\"tracking_no\":\"DPD1000021\",\"country\":\"FR\",\"plus_member\":false,\"return_window_ends\":\"2026-10-20\",\"items\":[{\"sku\":\"JKT-203\",\"name\":\"Rain jacket\",\"category\":\"clothing\",\"price_eur\":89.0,\"returnable_category\":true,\"already_returned\":false}]}",
+    "[start_return] {\"status\":\"started\",\"lines\":[{\"sku\":\"JKT-203\",\"return_id\":\"RT-100002-JKT-203\",\"rejected_reason\":null}],\"label_fee_eur\":6.95,\"message\":\"Return started for 1 item(s); a return label fee of EUR 6.95 is deducted from the refund.\"}"
+   ],
+   "reply": "Your return for the rain jacket (SKU: JKT-203) has been started. A return label fee of **EUR 6.95** will be deducted from your refund. You can print the label from your order page and ship the item back within the return window (until **2026-10-20**).",
+   "reference": null
+  }
+ },
+ {
+  "label_id": "L18",
+  "case_id": "o12",
+  "model": "ministral-14b-latest",
+  "category": "out_of_scope",
+  "judge_input": {
+   "customer": [
+    "Can you recommend a good pasta recipe?"
+   ],
+   "context": [],
+   "reply": "I’m happy to help with Nordwind orders, but I don’t have recipes! Let me know if you’d like assistance with your purchases or any other questions about our shop.",
+   "reference": null
+  }
+ },
+ {
+  "label_id": "L19",
+  "case_id": "t16",
+  "model": "ministral-3b-latest",
+  "category": "order",
+  "judge_input": {
+   "customer": [
+    "Where is my parcel?",
+    "NW-100004",
+    "david@example.com"
+   ],
+   "context": [
+    "[get_order_status] Not executed: the customer has not given this order number and e-mail address. Ask the customer for it; do not guess.",
+    "[escalate_to_human] Ticket TK-00001 created. Human support is available Mon-Fri 8:00-20:00 and Sat 9:00-16:00 (CET); average response time is under 4 hours on business days.",
+    "[escalate_to_human] Ticket TK-00002 created. Human support is available Mon-Fri 8:00-20:00 and Sat 9:00-16:00 (CET); average response time is under 4 hours on business days.",
+    "[get_order_status] {\"order_id\":\"NW-100004\",\"status\":\"shipped\",\"ordered_on\":\"2026-10-07\",\"delivered_on\":null,\"carrier\":\"Post AT\",\"tracking_no\":\"POS1000041\",\"country\":\"AT\",\"plus_member\":false,\"return_window_ends\":null,\"items\":[{\"sku\":\"BAG-007\",\"name\":\"Leather backpack\",\"category\":\"bags\",\"price_eur\":129.0,\"returnable_category\":true,\"already_returned\":false}]}"
+   ],
+   "reply": "Your order **NW-100004** was shipped on **7 October 2026** with **Post AT** (tracking: POS1000041). The leather backpack is on its way—check your local carrier’s app for delivery updates!",
+   "reference": null
+  }
+ },
+ {
+  "label_id": "L20",
+  "case_id": "t10",
+  "model": "ministral-8b-latest",
+  "category": "order",
+  "judge_input": {
+   "customer": [
+    "I'd like to return the earrings and the scarf from NW-100006 (farid@example.com), I changed my mind."
+   ],
+   "context": [
+    "[get_order_status] {\"order_id\":\"NW-100006\",\"status\":\"delivered\",\"ordered_on\":\"2026-09-28\",\"delivered_on\":\"2026-10-01\",\"carrier\":\"DHL\",\"tracking_no\":\"DHL1000062\",\"country\":\"DE\",\"plus_member\":false,\"return_window_ends\":\"2026-10-31\",\"items\":[{\"sku\":\"EAR-055\",\"name\":\"Silver earrings\",\"category\":\"earrings\",\"price_eur\":39.0,\"returnable_category\":false,\"already_returned\":false},{\"sku\":\"SCF-019\",\"name\":\"Wool scarf\",\"category\":\"accessories\",\"price_eur\":24.9,\"returnable_category\":true,\"already_returned\":false}]}",
+    "[start_return] {\"status\":\"started\",\"lines\":[{\"sku\":\"SCF-019\",\"return_id\":\"RT-100006-SCF-019\",\"rejected_reason\":null}],\"label_fee_eur\":0.0,\"message\":\"Return started for 1 item(s); free of charge.\"}",
+    "[start_return] {\"status\":\"rejected\",\"lines\":[{\"sku\":\"EAR-055\",\"return_id\":null,\"rejected_reason\":\"non_returnable_category:earrings\"}],\"label_fee_eur\":0.0,\"message\":\"None of the items can be returned.\"}"
+   ],
+   "reply": "Your return for the wool scarf (SKU: SCF-019) has been started successfully and is free of charge. Unfortunately, the earrings (SKU: EAR-055) cannot be returned as they belong to a non-returnable category.",
+   "reference": null
+  }
+ }
+]
