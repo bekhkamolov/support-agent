@@ -39,20 +39,23 @@ def langfuse_config(env: dict[str, str] | None = None) -> OtlpConfig | None:
     )
 
 
-UNTRACED_SPANS = {"GET /health"}  # platform health checks (Render polls about twice a minute)
+UNTRACED_PATHS = {"/health"}  # platform health checks (Render polls several times a minute)
 
 
 def health_check_sampler():
     """Drop health-check requests and, via ParentBased, all their child spans; sample everything else.
 
     Without this, health checks would be the majority of traces and use up the tracing quota.
+    Decided on the `url.path` attribute: when the sampler runs, the request span is only named
+    "GET" (FastAPI renames it to "GET /health" after routing).
     """
     from opentelemetry.sdk.trace.sampling import Decision, ParentBased, Sampler, SamplingResult
 
     class DropUntraced(Sampler):
         def should_sample(self, parent_context, trace_id, name, kind=None, attributes=None, links=None,
                           trace_state=None):
-            return SamplingResult(Decision.DROP if name in UNTRACED_SPANS else Decision.RECORD_AND_SAMPLE,
+            path = (attributes or {}).get("url.path")
+            return SamplingResult(Decision.DROP if path in UNTRACED_PATHS else Decision.RECORD_AND_SAMPLE,
                                   attributes)
 
         def get_description(self) -> str:
