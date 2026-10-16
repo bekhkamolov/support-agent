@@ -1,6 +1,6 @@
 """Evaluate RAG answers on the labelled question set, with and without prompt caching.
 
-Answer correctness needs reference answers and an LLM judge (Day 4). This script measures what can
+Answer correctness needs reference answers and an LLM judge (scripts/eval_agent.py). This script measures what can
 be checked automatically today: citation accuracy against the gold documents, invented citations,
 confidence distribution, tokens (incl. cached tokens) and latency.
 

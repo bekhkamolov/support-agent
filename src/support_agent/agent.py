@@ -273,7 +273,7 @@ def apply_guardrail(reply: AgentReply, deps: AgentDeps) -> tuple[str, bool]:
     """Force a hand-off when the agent answered a policy question without a relevant policy.
 
     Runs in code after the model, because the model's own confidence is not a reliable signal
-    (Day 2: "high" on 51 of 52 answers).
+    (RAG evaluation: "high" on 51 of 52 answers).
     """
     used_order_tool = any(c.tool in ORDER_TOOLS for c in deps.tool_calls)
     weak_retrieval = deps.best_retrieval_score is not None and deps.best_retrieval_score < deps.min_retrieval_score
