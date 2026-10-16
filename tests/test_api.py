@@ -122,6 +122,41 @@ def test_old_sessions_are_dropped_beyond_the_limit():
     assert again != first  # the oldest session was evicted, so a new one is created
 
 
+def test_chat_page_is_served():
+    with client_for(echo_model()) as client:
+        r = client.get("/")
+    assert r.status_code == 200 and "text/html" in r.headers["content-type"]
+    assert 'fetch("chat"' in r.text and ".innerHTML" not in r.text  # replies are inserted as text only
+
+
+def test_rate_limit_per_client(monkeypatch):
+    app = api.create_app(agent_factory=lambda store: SupportAgent(echo_model(), NoRetriever(), store),
+                         tracing=False, rate_limit=2)
+    with TestClient(app) as client:
+        assert [client.post("/chat", json={"message": str(i)}).status_code for i in range(2)] == [200, 200]
+        r = client.post("/chat", json={"message": "3"})
+    assert r.status_code == 429 and int(r.headers["Retry-After"]) > 0
+
+
+def test_rate_limiter_window_and_separate_clients(monkeypatch):
+    now = [1000.0]
+    monkeypatch.setattr(api.time, "monotonic", lambda: now[0])
+    limiter = api.RateLimiter(limit=2, window_s=60)
+    assert [limiter.retry_after("a") for _ in range(3)] == [0, 0, 61]
+    assert limiter.retry_after("b") == 0  # other clients are not affected
+    now[0] += 61
+    assert limiter.retry_after("a") == 0  # window has passed
+
+
+def test_forwarded_ip_is_only_trusted_when_configured():
+    class Req:
+        headers = {"x-forwarded-for": "203.0.113.7, 10.0.0.1"}
+        client = type("C", (), {"host": "10.0.0.1"})()
+
+    assert api.client_ip(Req(), trust_proxy=True) == "203.0.113.7"
+    assert api.client_ip(Req(), trust_proxy=False) == "10.0.0.1"  # header could be forged
+
+
 def test_langfuse_config_is_off_without_keys():
     assert langfuse_config({}) is None
     assert langfuse_config({"LANGFUSE_PUBLIC_KEY": "pk"}) is None

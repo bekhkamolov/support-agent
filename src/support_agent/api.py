@@ -4,6 +4,7 @@ Run:
     uvicorn support_agent.api:create_app --factory --port 8000
 
 Endpoints:
+    GET  /         chat page (static HTML, no build step)
     GET  /health   liveness and configuration status
     POST /chat     one customer message; pass the returned session_id to continue a conversation
 
@@ -17,12 +18,14 @@ import os
 import threading
 import time
 import uuid
-from collections import OrderedDict
+from collections import OrderedDict, deque
 from collections.abc import Callable
 from contextlib import asynccontextmanager
 from dataclasses import dataclass, field
+from pathlib import Path
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import FileResponse
 from opentelemetry import trace
 from pydantic import BaseModel, Field
 from pydantic_ai.exceptions import ModelAPIError, ModelHTTPError
@@ -35,7 +38,41 @@ MAX_SESSIONS = 500  # oldest sessions are dropped beyond this (bounded memory)
 SESSION_TTL_S = 60 * 60
 MAX_TURNS = 20  # per session; bounds prompt size and cost
 
+STATIC_DIR = Path(__file__).parent / "static"
+
 AgentFactory = Callable[[OrderStore], SupportAgent]
+
+
+class RateLimiter:
+    """Sliding-window limit per client, so a public demo cannot exhaust the model API quota."""
+
+    def __init__(self, limit: int, window_s: float = 3600, max_clients: int = 10_000):
+        self.limit, self.window_s, self.max_clients = limit, window_s, max_clients
+        self._hits: OrderedDict[str, deque] = OrderedDict()
+        self._lock = threading.Lock()
+
+    def retry_after(self, client: str) -> int:
+        """0 if the request is allowed (and counted), else seconds until the next one is."""
+        now = time.monotonic()
+        with self._lock:
+            hits = self._hits.setdefault(client, deque())
+            self._hits.move_to_end(client)
+            while hits and now - hits[0] > self.window_s:
+                hits.popleft()
+            if len(hits) >= self.limit:
+                return int(self.window_s - (now - hits[0])) + 1
+            hits.append(now)
+            while len(self._hits) > self.max_clients:
+                self._hits.popitem(last=False)
+            return 0
+
+
+def client_ip(request: Request, trust_proxy: bool) -> str:
+    """Client address. Behind a reverse proxy (e.g. Hugging Face Spaces) the real client is the first
+    X-Forwarded-For entry; the header is only trusted when configured, because clients can set it."""
+    if trust_proxy and (forwarded := request.headers.get("x-forwarded-for")):
+        return forwarded.split(",")[0].strip()
+    return request.client.host if request.client else "unknown"
 tracer = trace.get_tracer("support_agent.api")  # no-op unless tracing.setup_tracing() was called
 
 
@@ -105,8 +142,15 @@ def default_agent_factory() -> AgentFactory | None:
     return lambda store: SupportAgent(model, retriever, store)
 
 
-def create_app(agent_factory: AgentFactory | None = None, tracing: bool | None = None) -> FastAPI:
-    """App factory. Tests pass a factory with a scripted model; production builds it from env vars."""
+def create_app(
+    agent_factory: AgentFactory | None = None, tracing: bool | None = None, rate_limit: int | None = None
+) -> FastAPI:
+    """App factory. Tests pass a factory with a scripted model; production builds it from env vars.
+
+    rate_limit: messages per client and hour (default: env RATE_LIMIT_PER_HOUR, else 60).
+    """
+    limiter = RateLimiter(rate_limit or int(os.getenv("RATE_LIMIT_PER_HOUR", "").strip() or 60))
+    trust_proxy = os.getenv("TRUST_PROXY_HEADERS", "").strip() == "1"
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
@@ -122,16 +166,23 @@ def create_app(agent_factory: AgentFactory | None = None, tracing: bool | None =
 
     app = FastAPI(title="Nordwind support agent", version="0.1.0", lifespan=lifespan)
 
+    @app.get("/", include_in_schema=False)
+    def index() -> FileResponse:
+        return FileResponse(STATIC_DIR / "index.html")
+
     @app.get("/health")
     def health() -> dict:
         return {"status": "ok", "agent_ready": app.state.sessions is not None, "tracing": app.state.tracing}
 
     @app.post("/chat", response_model=ChatResponse)
-    def chat(req: ChatRequest) -> ChatResponse:
+    def chat(req: ChatRequest, request: Request) -> ChatResponse:
         # A sync endpoint: FastAPI runs it in a worker thread, so a slow model call does not block
         # other requests.
         if app.state.sessions is None:
             raise HTTPException(503, "Agent not configured: set MISTRAL_API_KEY.")
+        if wait := limiter.retry_after(client_ip(request, trust_proxy)):
+            raise HTTPException(429, f"Too many messages from this address; try again in {wait // 60 + 1} min.",
+                                headers={"Retry-After": str(wait)})
         session_id, session = app.state.sessions.get_or_create(req.session_id)
         with session.lock:  # one message at a time per conversation
             if session.turns >= MAX_TURNS:

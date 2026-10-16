@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nordwind Support Agent</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --panel: #ffffff; --text: #1d2330; --muted: #667085; --border: #e3e6eb;
+    --accent: #1f5eff; --accent-text: #ffffff; --agent: #f0f2f5; --chip: #eef2ff; --chip-text: #3046a8;
+    --warn: #fff4e5; --warn-text: #8a4b00;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #12151b; --panel: #1a1e26; --text: #e6e8ec; --muted: #9aa3b2; --border: #2b313c;
+      --accent: #5b8cff; --accent-text: #0b1020; --agent: #232833; --chip: #263152; --chip-text: #b8c6ff;
+      --warn: #3a2a12; --warn-text: #ffcf8a;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 16px; display: grid; gap: 16px;
+          grid-template-columns: minmax(0, 1fr) 320px; }
+  @media (max-width: 860px) { .wrap { grid-template-columns: minmax(0, 1fr); } }
+  header { grid-column: 1 / -1; }
+  h1 { font-size: 22px; margin: 0; }
+  header p { margin: 4px 0 0; color: var(--muted); }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; }
+  .chat { display: flex; flex-direction: column; height: min(72vh, 720px); }
+  #log { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+  .msg { max-width: 85%; padding: 10px 14px; border-radius: 12px; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .user { align-self: flex-end; background: var(--accent); color: var(--accent-text); border-bottom-right-radius: 4px; }
+  .agent { align-self: flex-start; background: var(--agent); border-bottom-left-radius: 4px; }
+  .meta { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px; font-size: 12px; }
+  .chip { background: var(--chip); color: var(--chip-text); border-radius: 999px; padding: 2px 8px; }
+  .chip.warn { background: var(--warn); color: var(--warn-text); }
+  .typing { color: var(--muted); font-style: italic; }
+  form { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--border); }
+  textarea { flex: 1; resize: none; min-height: 44px; max-height: 140px; padding: 10px 12px; font: inherit;
+             color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: 10px; }
+  button { font: inherit; border: 0; border-radius: 10px; padding: 0 16px; cursor: pointer;
+           background: var(--accent); color: var(--accent-text); }
+  button:disabled { opacity: .5; cursor: default; }
+  .side { padding: 16px; display: flex; flex-direction: column; gap: 14px; align-self: start; }
+  .side h2 { font-size: 14px; margin: 0 0 6px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+  .examples button { display: block; width: 100%; text-align: left; margin-bottom: 6px; padding: 8px 10px;
+                     background: var(--bg); color: var(--text); border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  td { padding: 3px 4px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  td:first-child { font-family: ui-monospace, Consolas, monospace; white-space: nowrap; }
+  .note { font-size: 12px; color: var(--muted); }
+  .link { color: var(--accent); }
+  #reset { background: transparent; color: var(--accent); border: 1px solid var(--border); padding: 6px 10px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Nordwind support assistant <span class="note">· demo</span></h1>
+    <p>An AI agent for a fictional online shop: it answers from policy documents (RAG), looks up orders and
+       starts returns through tool calls, and hands over to a human when it cannot answer reliably.</p>
+  </header>
+
+  <main class="card chat">
+    <div id="log" aria-live="polite"></div>
+    <form id="form">
+      <textarea id="input" placeholder="Ask about returns, shipping, payments, or an order…" maxlength="2000"
+                rows="1" aria-label="Your message"></textarea>
+      <button id="send" type="submit">Send</button>
+    </form>
+  </main>
+
+  <aside class="card side">
+    <div>
+      <h2>Try</h2>
+      <div class="examples" id="examples"></div>
+    </div>
+    <div>
+      <h2>Demo orders</h2>
+      <table>
+        <tr><td>NW-100001</td><td>anna@example.com<br><span class="note">delivered, Germany</span></td></tr>
+        <tr><td>NW-100002</td><td>ben@example.com<br><span class="note">delivered, France (return fee)</span></td></tr>
+        <tr><td>NW-100003</td><td>carla@example.com<br><span class="note">return window expired</span></td></tr>
+        <tr><td>NW-100004</td><td>david@example.com<br><span class="note">shipped, not delivered</span></td></tr>
+        <tr><td>NW-100006</td><td>farid@example.com<br><span class="note">earrings (non-returnable) + scarf</span></td></tr>
+        <tr><td>NW-100008</td><td>hannah@example.com<br><span class="note">Plus member, 60-day window</span></td></tr>
+      </table>
+      <p class="note">Each conversation gets its own fresh copy of these orders. Dates are relative to 10 Oct 2026.</p>
+    </div>
+    <div>
+      <button id="reset" type="button">New conversation</button>
+    </div>
+    <p class="note">Demo with synthetic data. Messages are logged for quality evaluation — please don't enter
+       personal data. Answers can be wrong.
+       <a class="link" href="https://github.com/bekhkamolov/support-agent" target="_blank" rel="noopener">Source &amp; evaluation</a></p>
+  </aside>
+</div>
+
+<script>
+  const EXAMPLES = [
+    "Can I return earrings I bought last week?",
+    "I want to return the jeans from NW-100001, my e-mail is anna@example.com",
+    "Where is my order NW-100004? david@example.com",
+    "How long does a PayPal refund take?",
+    "Do you offer gift wrapping?",
+    "I want to talk to a real person.",
+  ];
+  const TOOL_LABELS = {
+    search_policies: "searched policies", get_order_status: "looked up order",
+    start_return: "return", escalate_to_human: "handed to human",
+  };
+  const log = document.getElementById("log");
+  const form = document.getElementById("form");
+  const input = document.getElementById("input");
+  const send = document.getElementById("send");
+  let sessionId = null;
+
+  // Text is always inserted with textContent (no innerHTML), so replies cannot inject markup.
+  // Only **bold** is rendered, by splitting the text into <strong> and text nodes.
+  function renderText(el, text) {
+    text.split(/(\*\*[^*]+\*\*)/g).forEach(part => {
+      if (part.startsWith("**") && part.endsWith("**") && part.length > 4) {
+        const b = document.createElement("strong"); b.textContent = part.slice(2, -2); el.appendChild(b);
+      } else if (part) {
+        el.appendChild(document.createTextNode(part));
+      }
+    });
+  }
+
+  function chip(text, warn) {
+    const c = document.createElement("span");
+    c.className = "chip" + (warn ? " warn" : ""); c.textContent = text; return c;
+  }
+
+  function addMessage(role, text, data) {
+    const div = document.createElement("div");
+    div.className = "msg " + role;
+    renderText(div, text);
+    if (data) {
+      const meta = document.createElement("div"); meta.className = "meta";
+      for (const t of data.tool_calls) {
+        if (t.outcome === "refused") continue;  // blocked by a code check; not interesting for visitors
+        const label = TOOL_LABELS[t.tool] || t.tool;
+        meta.appendChild(chip(t.tool === "start_return" ? `${label}: ${t.outcome}` : label));
+      }
+      for (const d of data.cited_doc_ids) meta.appendChild(chip("source: " + d));
+      if (data.ticket_id) meta.appendChild(chip("ticket " + data.ticket_id, true));
+      meta.appendChild(chip((data.latency_ms / 1000).toFixed(1) + " s"));
+      div.appendChild(meta);
+    }
+    log.appendChild(div);
+    log.scrollTop = log.scrollHeight;
+    return div;
+  }
+
+  async function ask(text) {
+    addMessage("user", text);
+    const typing = addMessage("agent typing", "Thinking…");
+    send.disabled = true;
+    try {
+      const res = await fetch("chat", {
+        method: "POST", headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(sessionId ? {message: text, session_id: sessionId} : {message: text}),
+      });
+      const data = await res.json().catch(() => ({}));
+      typing.remove();
+      if (!res.ok) {
+        const detail = typeof data.detail === "string" ? data.detail : "Something went wrong.";
+        if (res.status === 409) sessionId = null;
+        addMessage("agent", `Error ${res.status}: ${detail}`);
+        return;
+      }
+      sessionId = data.session_id;
+      addMessage("agent", data.message, data);
+    } catch (e) {
+      typing.remove();
+      addMessage("agent", "Network error — please try again.");
+    } finally {
+      send.disabled = false;
+      input.focus();
+    }
+  }
+
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    const text = input.value.trim();
+    if (!text || send.disabled) return;
+    input.value = "";
+    ask(text);
+  });
+  input.addEventListener("keydown", e => {
+    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); form.requestSubmit(); }
+  });
+  document.getElementById("reset").addEventListener("click", () => {
+    sessionId = null; log.replaceChildren();
+    addMessage("agent", "New conversation. How can I help?");
+  });
+  const ex = document.getElementById("examples");
+  for (const q of EXAMPLES) {
+    const b = document.createElement("button"); b.type = "button"; b.textContent = q;
+    b.addEventListener("click", () => { if (!send.disabled) ask(q); });
+    ex.appendChild(b);
+  }
+  addMessage("agent", "Hi! I'm the Nordwind support assistant. How can I help?");
+</script>
+</body>
+</html>
