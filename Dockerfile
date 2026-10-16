@@ -25,8 +25,10 @@ COPY data/policies ./data/policies
 RUN useradd --create-home --uid 1000 app && mkdir -p /app/.cache && chown app /app/.cache
 USER app
 
+# Hosting platforms (e.g. Render) pass the port in $PORT; 8000 otherwise.
 EXPOSE 8000
-HEALTHCHECK --interval=30s --timeout=5s --start-period=30s \
-    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=4)"
+HEALTHCHECK --interval=30s --timeout=5s --start-period=60s \
+    CMD python -c "import os, urllib.request; urllib.request.urlopen(f'http://localhost:{os.getenv(\"PORT\", \"8000\")}/health', timeout=4)"
 
-CMD ["uvicorn", "support_agent.api:create_app", "--factory", "--host", "0.0.0.0", "--port", "8000"]
+# exec: uvicorn replaces the shell, so it receives stop signals directly and shuts down cleanly.
+CMD ["sh", "-c", "exec uvicorn support_agent.api:create_app --factory --host 0.0.0.0 --port ${PORT:-8000}"]

@@ -28,11 +28,18 @@ jobs:
           cat health.json
           python3 -c "import json; h = json.load(open('health.json')); assert h['status'] == 'ok' and h['agent_ready'] is False, h"
       - run: test "$(docker exec app whoami)" = "app"
+      - name: Chat page is served from the installed package
+        run: curl -fsS http://localhost:8000/ | grep -q "Nordwind support assistant"
       - name: Chat without API key returns 503
         run: |
           code=$(curl -s -o /dev/null -w '%{http_code}' -X POST localhost:8000/chat \
                  -H 'Content-Type: application/json' -d '{"message":"hi"}')
           echo "HTTP $code"
           test "$code" = "503"
+      - name: Container listens on $PORT (as set by Render)
+        run: |
+          docker run -d --name app2 -e PORT=9000 -p 9000:9000 support-agent
+          for i in $(seq 1 30); do curl -fsS http://localhost:9000/health && exit 0; sleep 1; done
+          docker logs app2; exit 1
       - if: always()
         run: docker logs app

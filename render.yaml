@@ -1,0 +1,23 @@
+# Render Blueprint: deploys the Docker image as a free web service in Frankfurt (EU).
+# Secrets (sync: false) are entered once in the Render dashboard when the Blueprint is created;
+# they are never stored in this repository.
+services:
+  - type: web
+    name: nordwind-support-agent
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    autoDeployTrigger: checksPass  # redeploy only after CI (tests + Docker smoke test) passes
+    envVars:
+      - key: MISTRAL_API_KEY
+        sync: false
+      - key: LANGFUSE_PUBLIC_KEY
+        sync: false
+      - key: LANGFUSE_SECRET_KEY
+        sync: false
+      - key: TRUST_PROXY_HEADERS  # Render's proxy sets X-Forwarded-For
+        value: "1"
+      - key: RATE_LIMIT_PER_HOUR  # per visitor; protects the free model quota
+        value: "30"
