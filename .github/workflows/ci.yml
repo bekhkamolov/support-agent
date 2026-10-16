@@ -29,6 +29,10 @@ jobs:
           python3 -c "import json; h = json.load(open('health.json')); assert h['status'] == 'ok' and h['agent_ready'] is False, h"
       - run: test "$(docker exec app whoami)" = "app"
       - name: Chat without API key returns 503
-        run: test "$(curl -s -o /dev/null -w '%{http_code}' -X POST localhost:8000/chat -H 'Content-Type: application/json' -d '{"message":"hi"}')" = "503"
+        run: |
+          code=$(curl -s -o /dev/null -w '%{http_code}' -X POST localhost:8000/chat \
+                 -H 'Content-Type: application/json' -d '{"message":"hi"}')
+          echo "HTTP $code"
+          test "$code" = "503"
       - if: always()
         run: docker logs app
