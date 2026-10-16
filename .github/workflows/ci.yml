@@ -8,5 +8,27 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: pip install -e ".[dev]"
-      - run: pytest -q
+      - run: pip install -e ".[dev,api,tracing]"
+      - run: pytest -q --cov=support_agent --cov-report=term-missing
+
+  docker:
+    # Builds the image and checks that the container starts, answers /health and runs as non-root.
+    # No API keys in CI, so the agent must report agent_ready=false instead of crashing.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t support-agent .
+      - run: docker run -d --name app -p 8000:8000 support-agent
+      - name: Wait for /health
+        run: |
+          for i in $(seq 1 30); do
+            if curl -fsS http://localhost:8000/health > health.json; then break; fi
+            sleep 1
+          done
+          cat health.json
+          python3 -c "import json; h = json.load(open('health.json')); assert h['status'] == 'ok' and h['agent_ready'] is False, h"
+      - run: test "$(docker exec app whoami)" = "app"
+      - name: Chat without API key returns 503
+        run: test "$(curl -s -o /dev/null -w '%{http_code}' -X POST localhost:8000/chat -H 'Content-Type: application/json' -d '{"message":"hi"}')" = "503"
+      - if: always()
+        run: docker logs app

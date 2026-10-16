@@ -111,6 +111,72 @@ def test_judge_drops_correctness_without_reference(tmp_path):
     assert judge(JudgeInput(customer=["q"], context=[], reply="r")).correct is None
 
 
+class _CountingAgent:
+    """Stand-in for SupportAgent: returns scripted per-turn results and records the history it gets."""
+
+    def __init__(self, results):
+        self.results, self.histories = list(results), []
+
+    def ask(self, message, history=None):
+        from support_agent.agent import AgentResult
+
+        self.histories.append(history)
+        fields = {"cited_doc_ids": [], "invalid_citations": [], "escalated": False, "ticket_id": None,
+                  "guardrail_triggered": False, "best_retrieval_score": None, "input_tokens": 100,
+                  "output_tokens": 10, "cached_tokens": 40, "requests": 2, "latency_ms": 500.0}
+        from pydantic_ai.messages import ModelRequest, UserPromptPart
+
+        return AgentResult(**{**fields, **self.results.pop(0)}), [ModelRequest(parts=[UserPromptPart(content=message)])]
+
+
+def test_run_case_sums_turns_and_keeps_the_final_reply():
+    from support_agent.agent import ToolCallRecord
+    from support_agent.evals.runner import run_case
+
+    agent = _CountingAgent([
+        {"message": "Which order?", "tool_calls": [ToolCallRecord(tool="get_order_status", args={}, outcome="refused")]},
+        {"message": "Return started.", "escalated": True, "failure": None,
+         "tool_calls": [ToolCallRecord(tool="start_return", args={}, outcome="started")]},
+    ])
+    record = run_case(agent, EvalCase(id="m", category="order", turns=["return jeans", "NW-100001"], expect={}))
+    assert record["message"] == "Return started."
+    assert [c["outcome"] for c in record["tool_calls"]] == ["refused", "started"]
+    assert record["input_tokens"] == 200 and record["requests"] == 4 and record["latency_ms"] == 1000.0
+    assert record["escalated"] is True
+    assert agent.histories[0] is None  # turn 2 continues turn 1:
+    assert agent.histories[1][0].parts[0].content == "return jeans"
+
+
+def test_tool_context_collects_tool_results_for_the_judge():
+    from pydantic_ai.messages import ModelRequest, ToolReturnPart
+
+    from support_agent.evals.runner import tool_context
+    from support_agent.orders import ReturnResult
+
+    history = [ModelRequest(parts=[
+        ToolReturnPart(tool_name="start_return", content=ReturnResult(status="rejected", message="No.")),
+        ToolReturnPart(tool_name="get_order_status", content="No order found."),
+        ToolReturnPart(tool_name="final_result", content="Final result processed."),  # framework internal
+    ])]
+    lines = tool_context(history)
+    assert lines[0].startswith('[start_return] {"status":"rejected"')
+    assert lines[1] == "[get_order_status] No order found."
+    assert len(lines) == 2
+
+
+def test_cached_runs_are_not_repeated_and_key_ignores_expectations(tmp_path):
+    from support_agent.evals.runner import run_case_cached
+
+    cache = DiskCache("runs", root=tmp_path)
+    agent = _CountingAgent([{"message": "ok", "tool_calls": []}])
+    c1 = EvalCase(id="x", category="policy", turns=["hi"], expect={"escalate": False})
+    c2 = EvalCase(id="x", category="policy", turns=["hi"], expect={"escalate": True})  # corrected expectation
+    first = run_case_cached(agent, "m", c1, cache)
+    second = run_case_cached(agent, "m", c2, cache)  # would fail if the agent were asked again
+    assert first["from_cache"] is False and second["from_cache"] is True
+    assert second["message"] == "ok"
+
+
 def test_judge_prompt_contains_all_parts():
     text = render(JudgeInput(customer=["Can I return?"], context=[], reply="Yes.", reference="30 days."))
     assert "CUSTOMER:\n- Can I return?" in text and "(the assistant used no tools)" in text
