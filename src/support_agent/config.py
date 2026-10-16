@@ -6,7 +6,8 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-ROOT = Path(__file__).resolve().parents[2]
+# Repository root. Set SUPPORT_AGENT_ROOT when the package is installed elsewhere (e.g. in Docker).
+ROOT = Path(os.getenv("SUPPORT_AGENT_ROOT") or Path(__file__).resolve().parents[2])
 DATA_DIR = ROOT / "data"
 POLICY_DIR = DATA_DIR / "policies"
 EVAL_DIR = DATA_DIR / "eval"
