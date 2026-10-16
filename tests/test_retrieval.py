@@ -57,6 +57,23 @@ def test_backoff_retries_on_429_then_succeeds():
     assert sleeps == [1.0, 2.0]
 
 
+def test_backoff_retries_transient_server_errors():
+    from support_agent.retry import with_backoff
+
+    class Overloaded(Exception):
+        status_code = 503
+
+    calls = []
+
+    def flaky():
+        calls.append(1)
+        if len(calls) == 1:
+            raise Overloaded()
+        return "ok"
+
+    assert with_backoff(flaky, sleep=lambda s: None) == "ok" and len(calls) == 2
+
+
 def test_backoff_fails_fast_when_plan_allows_zero_requests():
     import pytest
 

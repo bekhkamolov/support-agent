@@ -303,6 +303,7 @@ def mistral_model(name: str = "ministral-14b-latest") -> Model:
     client = Mistral(
         api_key=get_env("MISTRAL_API_KEY"),
         retry_config=RetryConfig("backoff", BackoffStrategy(1000, 30000, 2.0, 120000), True),
+        timeout_ms=120_000,  # without it the HTTP client's short default timeout aborted slow responses
     )
     return MistralModel(name, provider=MistralProvider(mistral_client=client), settings={"temperature": 0.0})
 
