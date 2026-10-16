@@ -5,8 +5,10 @@ policy documents with retrieval-augmented generation (RAG), checks orders and st
 tool calls, and hands off to a human when it is not confident. The focus of the project is a
 **reproducible evaluation harness**: every design choice is backed by a measured number.
 
-> Status: **Day 5 – API, tracing, Docker.** Deployment with a chat UI (Day 6) and write-up (Day 7)
-> follow.
+**Live demo: https://nordwind-support-agent.onrender.com** (free tier: after 15 minutes without
+visitors the service sleeps, and the first request takes about a minute to wake it).
+
+> Status: **Day 6 – deployed with a chat UI.** Write-up (Day 7) follows.
 
 ## Project structure
 
@@ -355,6 +357,39 @@ container** on every push: it starts, `/health` answers, it runs as non-root, an
 **Tests:** 82 unit tests, 90% line coverage (reported in CI). API tests use a scripted model and
 check sessions, isolation between sessions, validation, limits and error handling.
 
+## Deployment (Day 6)
+
+The Docker image runs as a free web service on **Render** (Frankfurt, EU), defined in
+`render.yaml` (Blueprint). Render builds from this repository and redeploys automatically, but only
+after CI has passed (`autoDeployTrigger: checksPass`), so a commit that breaks the tests or the
+Docker smoke test never goes live. API keys are entered once in Render's dashboard and are not in
+the repository.
+
+**Chat page** (`src/support_agent/static/index.html`): one static HTML file served by the FastAPI
+app at `/`, so there is one container, one port and no front-end build. Under each reply it shows
+what the agent did (tools, sources, ticket number), next to example questions and the demo orders.
+Replies are inserted as text, never as HTML, so model output cannot inject markup.
+
+**Protection for a public demo:**
+- 30 messages per visitor and hour (sliding window; the client IP comes from Render's proxy
+  header, which is only trusted when `TRUST_PROXY_HEADERS=1`).
+- Per-conversation limits from Day 5 (20 messages, 2000 characters, separate demo order database).
+- The page tells visitors that messages are logged and asks them not to enter personal data.
+
+**Tracing in production:** Render checks `/health` about twice a minute. These requests are dropped
+by an OpenTelemetry sampler before export; without it they would have been most of the traces in
+Langfuse (19 of 21 requests in the first 10 minutes) and used up the free tracing quota.
+
+**Platform choice:** Hugging Face Spaces was the first choice, but Docker Spaces on free CPU now
+require a paid PRO plan (the deployment was refused with HTTP 402). Render's free tier runs the same
+image without a credit card; the cost is the cold start after inactivity and limited resources
+(0.1 CPU, 512 MB RAM), which are enough because the model runs at Mistral, not in the container.
+
+Verified after deployment: `/health` reports agent and tracing ready, the page loads, and a
+two-turn conversation (return with EUR 6.95 fee, then a refund-timing question) works, with both
+turns grouped as one session in Langfuse. The second answer also showed the known grounding
+weakness: "3 to 5 business days after shipping", where the policy says after the parcel arrives.
+
 ## Design decisions
 
 | decision | why |
@@ -391,4 +426,9 @@ check sessions, isolation between sessions, validation, limits and error handlin
 | App factory + injected agent | Tests run the real API with a scripted model; production builds the agent from environment variables. |
 | Server starts without API key (`agent_ready: false`, 503) | Health checks and container smoke tests work without secrets; misconfiguration is visible instead of a crash loop. |
 | Docker image built and tested in CI | Proves the image builds on a clean machine and starts; no local Docker needed. |
+| Render free tier instead of Hugging Face Spaces | HF Docker Spaces need a paid plan; Render runs the same image for free (EU region), at the cost of a cold start after inactivity. |
+| Deploy only after CI passes (`checksPass`) | A broken commit cannot reach the live demo. |
+| Chat page as one static HTML file served by the API | No second server, no front-end build, no extra dependency (Gradio/Streamlit) for a chat box. |
+| Per-visitor rate limit; proxy header trusted only when configured | A public URL on a free model key needs abuse protection; trusting `X-Forwarded-For` by default would let clients fake their IP. |
+| Health checks excluded from tracing | They would dominate the traces and the free tracing quota while carrying no information. |
 | Cost from list prices per token (docs.mistral.ai, retrieved 2026-10-11) | Comparable cost per case across models; cached input tokens priced separately. Query embeddings are excluded (no price listed). |
