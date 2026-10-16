@@ -39,7 +39,7 @@ def langfuse_config(env: dict[str, str] | None = None) -> OtlpConfig | None:
     )
 
 
-UNTRACED_PATHS = {"/health"}  # platform health checks (Render polls several times a minute)
+UNTRACED_PATHS = {"/health"}  # platform health checks (Render polls every 5 seconds)
 
 
 def health_check_sampler():

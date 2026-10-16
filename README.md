@@ -376,9 +376,13 @@ Replies are inserted as text, never as HTML, so model output cannot inject marku
 - Per-conversation limits from Day 5 (20 messages, 2000 characters, separate demo order database).
 - The page tells visitors that messages are logged and asks them not to enter personal data.
 
-**Tracing in production:** Render checks `/health` about twice a minute. These requests are dropped
-by an OpenTelemetry sampler before export; without it they would have been most of the traces in
-Langfuse (19 of 21 requests in the first 10 minutes) and used up the free tracing quota.
+**Tracing in production:** Render checks `/health` every 5 seconds (about 17,000 requests a day).
+These requests are dropped by an OpenTelemetry sampler before export; otherwise they would bury
+the real conversations in Langfuse and use up the free tracing quota. The first version of the
+sampler filtered on the span name `GET /health` and dropped nothing, because FastAPI names the span
+only `GET` when the sampler runs; it now decides on the request path. The test sends real requests
+through the app, and it fails with the first version. Verified in Langfuse: health-check traces
+every 5 s until the redeploy, none afterwards, chat traces complete.
 
 **Platform choice:** Hugging Face Spaces was the first choice, but Docker Spaces on free CPU now
 require a paid PRO plan (the deployment was refused with HTTP 402). Render's free tier runs the same
