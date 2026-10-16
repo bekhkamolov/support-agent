@@ -341,6 +341,12 @@ escalation, guardrail and tools used. Tracing is off unless `LANGFUSE_PUBLIC_KEY
 `LANGFUSE_SECRET_KEY` are set; `LANGFUSE_INCLUDE_CONTENT=false` exports structure, timings and token
 counts without message text.
 
+Verified live (3 messages in 2 conversations): Langfuse received one trace per message, grouped
+into the 2 sessions, with the agent run, 8 model calls (input, output and cached tokens each) and
+the tool calls (`search_policies`, `get_order_status`, `escalate_to_human`) as child spans. Langfuse
+shows no cost for these calls because `ministral-14b` is not in its price list (it can be added as
+a custom model); cost per conversation is computed by the evaluation harness instead.
+
 **Docker:** `python:3.11-slim`, non-root user, health check, keys only at runtime (`--env-file`).
 Docker is not installed on the development machine, so **CI builds the image and smoke-tests the
 container** on every push: it starts, `/health` answers, it runs as non-root, and `/chat` returns
