@@ -39,6 +39,28 @@ def langfuse_config(env: dict[str, str] | None = None) -> OtlpConfig | None:
     )
 
 
+UNTRACED_SPANS = {"GET /health"}  # platform health checks (Render polls about twice a minute)
+
+
+def health_check_sampler():
+    """Drop health-check requests and, via ParentBased, all their child spans; sample everything else.
+
+    Without this, health checks would be the majority of traces and use up the tracing quota.
+    """
+    from opentelemetry.sdk.trace.sampling import Decision, ParentBased, Sampler, SamplingResult
+
+    class DropUntraced(Sampler):
+        def should_sample(self, parent_context, trace_id, name, kind=None, attributes=None, links=None,
+                          trace_state=None):
+            return SamplingResult(Decision.DROP if name in UNTRACED_SPANS else Decision.RECORD_AND_SAMPLE,
+                                  attributes)
+
+        def get_description(self) -> str:
+            return "DropUntraced"
+
+    return ParentBased(root=DropUntraced())
+
+
 def setup_tracing(service_name: str = "nordwind-support-agent") -> bool:
     """Install a global tracer provider exporting to Langfuse and instrument all agents.
 
@@ -56,7 +78,7 @@ def setup_tracing(service_name: str = "nordwind-support-agent") -> bool:
     from pydantic_ai import Agent
     from pydantic_ai.models.instrumented import InstrumentationSettings
 
-    provider = TracerProvider(resource=Resource.create({"service.name": service_name}))
+    provider = TracerProvider(resource=Resource.create({"service.name": service_name}), sampler=health_check_sampler())
     provider.add_span_processor(BatchSpanProcessor(OTLPSpanExporter(endpoint=config.endpoint, headers=config.headers)))
     trace.set_tracer_provider(provider)
     Agent.instrument_all(InstrumentationSettings(tracer_provider=provider, include_content=config.include_content))

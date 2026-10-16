@@ -157,6 +157,26 @@ def test_forwarded_ip_is_only_trusted_when_configured():
     assert api.client_ip(Req(), trust_proxy=False) == "10.0.0.1"  # header could be forged
 
 
+def test_health_checks_are_not_traced_but_chat_requests_are():
+    from opentelemetry.sdk.trace import TracerProvider
+    from opentelemetry.sdk.trace.export import SimpleSpanProcessor
+    from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanExporter
+
+    from support_agent.tracing import health_check_sampler
+
+    exporter = InMemorySpanExporter()
+    provider = TracerProvider(sampler=health_check_sampler())
+    provider.add_span_processor(SimpleSpanProcessor(exporter))
+    tracer = provider.get_tracer("test")
+    with tracer.start_as_current_span("GET /health"):
+        with tracer.start_as_current_span("fastapi.endpoint"):
+            pass
+    with tracer.start_as_current_span("POST /chat"):
+        with tracer.start_as_current_span("chat turn"):
+            pass
+    assert sorted(s.name for s in exporter.get_finished_spans()) == ["POST /chat", "chat turn"]
+
+
 def test_langfuse_config_is_off_without_keys():
     assert langfuse_config({}) is None
     assert langfuse_config({"LANGFUSE_PUBLIC_KEY": "pk"}) is None
