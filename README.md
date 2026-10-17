@@ -28,9 +28,10 @@ order overview that no tool returned (see [Limitations](#limitations)).*
   after a failure seen in live testing (invented order numbers, loops, a wrongly stated fee, ...).
 - **Model comparison on 71 cases:** Ministral 14B passes 96% of the deterministic checks at
   USD 0.0006 per conversation; 3B and 8B pass about 63% and over-escalate.
-- **LLM judge validated against human labels, and reported as failing:** the Mistral judge's
-  agreement with 20 hand labels is no better than chance (Cohen's kappa ≈ 0), so its scores are
-  not used for conclusions.
+- **LLM judges validated against human labels, with honest results:** the Mistral judge is no
+  better than chance on 20 hand labels (Cohen's kappa ≈ 0); a Gemini judge from another provider
+  catches errors Mistral misses (kappa 0.37 on groundedness), but its result depends on a label
+  revision, so neither judge's scores are used for conclusions.
 - **Production basics:** FastAPI, OpenTelemetry tracing to Langfuse, Docker image built and tested
   in CI, deployed to Render only after CI passes; 87 offline tests, 90% coverage.
 
@@ -94,9 +95,12 @@ cases.
 chosen floor (0.66) costs 1 unnecessary hand-over in 52 and catches 4 of 6 off-topic questions;
 near-topic questions are left to the model (details in [Agent](#escalation-guardrail-calibration)).
 
-**LLM judge:** agreement with human labels 0.80 / 0.92, but Cohen's kappa ≈ 0, i.e. no better
-than chance: it called every reply grounded that the human marked as ungrounded (details in
-[Judge validation](#judge-validation-results)).
+**LLM judges** (20 hand-labelled replies; details in [Judge validation](#judge-validation-results)):
+
+| judge | groundedness: agreement / kappa | correctness: agreement / kappa |
+|---|---|---|
+| ministral-14b (same family as the agent) | 0.75 / −0.09 | 0.92 / 0.00 (no verdict on the one incorrect reply) |
+| gemini-3.8-flash (other provider) | 0.80 / 0.37 (initial labels: 0.65 / −0.21) | 1.00 / 1.00 (only one incorrect reply in the sample) |
 
 ## Trade-offs
 
@@ -134,10 +138,11 @@ Docker image, at the price of a cold start of about a minute after inactivity an
   reflects the small corpus.
 - **Small evaluation set.** 71 agent cases and 20 hand labels; differences of a few cases are not
   meaningful, and no confidence intervals are reported.
-- **Answer quality is not validated.** The Mistral judge is no better than chance; the Gemini
-  comparison is incomplete (free tier: 20 requests/day). The hand labels come from one person and
-  were revised once (both versions reported). Correctness and groundedness numbers are therefore
-  not used for conclusions.
+- **Answer quality is not validated.** The Mistral judge is no better than chance. Gemini agrees
+  better, but only after a label revision that was partly made after seeing judge verdicts, the
+  sample has few negative labels (4 ungrounded, 1 incorrect), and Gemini's free tier (20 requests a
+  day) is too small to judge all 213 replies. The hand labels come from one person. Correctness and
+  groundedness numbers are therefore not used for conclusions.
 - **Unsupported details remain.** The agent sometimes adds facts no tool returned (e.g. "you will
   receive a label by e-mail", "refund 3–5 days after shipping" where the policy says after arrival).
 - **One model family.** The API plan only allows the Ministral models; no comparison with a
@@ -150,8 +155,9 @@ Docker image, at the price of a cold start of about a minute after inactivity an
 
 ## Next steps
 
-1. Label a second sample that deliberately includes known failures, finish the Gemini judge
-   comparison, and only then use judge scores.
+1. Label a second, fresh sample that deliberately includes known failures (no revision after
+   seeing judge verdicts); if Gemini holds up there, use it to judge all replies (paid tier or
+   spread over several days).
 2. Reduce unsupported details: shorter replies, an explicit "only state tool facts" check, or a
    second verification pass, measured on the same cases.
 3. Add real customer-style messages (e.g. from a public support dataset) to the retrieval and agent
@@ -368,8 +374,8 @@ are not available on the project's API plan). Run on 2026-10-11:
 For what code cannot check: *correct* (policy questions: does the reply answer in line with the gold
 policy?) and *grounded* (every reply: is every factual claim supported by what the tools returned?).
 The plan was Gemini (`gemini-3.8-flash`, a different provider than the agent); its free tier allows
-20 requests per day, so `ministral-14b` judges all replies, and both judges are compared with human
-labels on the same 20 replies.
+20 requests per day, so `ministral-14b` judges all replies (the judge columns in the table above),
+and both judges are compared with human labels on the same 20 replies.
 
 **Labelling criteria.** 20 replies, sampled stratified over models and categories with a fixed seed,
 labelled blind (the label file shows neither the model nor the judge verdict).
@@ -392,15 +398,30 @@ reported; the original labels are in `data/eval/hand_labels_initial.csv`, every 
 | ministral-14b | correct | 13 | 0.92 | 0.00 | initial and revised (unchanged) |
 | ministral-14b | grounded | 20 | 0.80 | −0.08 | initial |
 | ministral-14b | grounded | 20 | 0.75 | −0.09 | revised |
-| gemini-3.8-flash | both | 3 | 1.00 | n/a | **incomplete** (quota, server overload) |
+| gemini-3.8-flash | correct | 14 | 1.00 | 1.00 | initial and revised (unchanged) |
+| gemini-3.8-flash | grounded | 20 | 0.65 | −0.21 | initial |
+| gemini-3.8-flash | grounded | 20 | 0.80 | 0.37 | revised |
 
-**The Mistral judge is not validated: its agreement with the human labels is no better than
-chance.** High raw agreement is misleading, because most labelled replies are good (16 of 20
-grounded, 13 of 13 correct): a judge that always says "yes" would score similarly. It called every
-reply grounded that the human marked as ungrounded (3 of 3 initial, 4 of 4 revised), and it missed
-obvious failures outside the sample (3B's invented "we don't offer gift wrapping", 14B's "I can
-cancel it for you"). No self-preference was visible (lenient on 1 of 12 judgements of its own
-model's replies vs. 2 of 21 for the others), but the sample is far too small to conclude anything.
+High raw agreement is misleading here, because most labelled replies are good (16 of 20 grounded,
+13 of 14 correct): a judge that always says "yes" would score similarly. Kappa corrects for that.
+
+**The Mistral judge is not validated: it is no better than chance.** It called every reply grounded
+that the human marked as ungrounded (3 of 3 initial, 4 of 4 revised labels), returned no
+correctness verdict for the only incorrect reply (its 13 instead of 14 items), and missed obvious
+failures outside the sample (3B's invented "we don't offer gift wrapping", 14B's "I can cancel it
+for you").
+
+**The Gemini judge is better but not cleanly validated.** It found the ungrounded claims Mistral
+missed ("print the label from your order page", "shipped on 7 October" where the data only has
+the order date) and marked the one incorrect reply as incorrect. Some of its disagreements are
+arguably label errors: for L13 it flagged "non-refundable" and "only for purchases on our website",
+which are indeed not in the context. But its groundedness kappa moves from −0.21 to 0.37 with the
+label revision, and two of the five revised labels were changed after seeing the (Mistral) judge
+disagree, which also favours Gemini. The correctness result rests on a single incorrect reply.
+
+No self-preference was visible (the Mistral judge was lenient on 0 of 12 judgements of its own
+model's replies vs. 4 of 21 for the others, revised labels), but the sample is far too small to
+conclude anything.
 
 ## Serving, tracing and deployment
 
